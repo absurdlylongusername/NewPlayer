@@ -227,7 +227,7 @@ class NewPlayerImpl(
                                     streamSelection.item
                                 )
                             )
-                            Log.d(TAG, "New avialble tracks: \n" + tracks.joinToString())
+                            Log.d(TAG, "New available tracks: \n" + tracks.joinToString())
                             tracks
                         }
                     }
@@ -300,7 +300,7 @@ class NewPlayerImpl(
                 }
 
                 else -> {
-                    throw NewPlayerException("Unknwon exception response ${response.javaClass}")
+                    throw NewPlayerException("Unknown exception response ${response.javaClass}")
                 }
             }
         }
@@ -388,7 +388,7 @@ class NewPlayerImpl(
             mutableCurrentlyAvailableTracks.update {
                 val tracks =
                     TrackUtils.getNonDynamicTracksNonDuplicated(repository.getStreams(item))
-                Log.d(TAG, "New avialble tracks: \n" + tracks.joinToString())
+                Log.d(TAG, "New available tracks: \n" + tracks.joinToString())
                 tracks
             }
 
@@ -474,7 +474,7 @@ internalPlayStream(mediaSource: MediaSource, playMode: PlayMode) {
     private suspend fun replaceCurrentItem(item: String) {
         mutableCurrentlyAvailableTracks.update {
             val tracks = TrackUtils.getNonDynamicTracksNonDuplicated(repository.getStreams(item))
-            Log.d(TAG, "New avialble tracks: \n" + tracks.joinToString())
+            Log.d(TAG, "New available tracks: \n" + tracks.joinToString())
             tracks
         }
 

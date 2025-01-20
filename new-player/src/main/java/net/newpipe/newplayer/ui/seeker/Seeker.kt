@@ -140,7 +140,7 @@ internal fun Seeker(
     if (segments.isNotEmpty()) {
         segments.forEach {
             require(it.start in range && it.end in range) {
-                "segment must lie withing the range: segment: ${it.name} start: ${it.start}, end: ${it.end}, range: ${range}"
+                "segment must lie within the range: segment: ${it.name} start: ${it.start}, end: ${it.end}, range: ${range}"
             }
         }
     }
@@ -149,7 +149,7 @@ internal fun Seeker(
     if (chapterSegments.isNotEmpty()) {
         chapterSegments.forEach {
             require(it.start in range) {
-                "chapter segment must lie withing the range: segment: ${it.name} start: ${it.start} range: ${range}"
+                "chapter segment must lie within the range: segment: ${it.name} start: ${it.start} range: ${range}"
             }
         }
     }

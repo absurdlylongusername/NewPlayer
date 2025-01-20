@@ -111,7 +111,7 @@ interface NewPlayer {
 
     /**
      * Same as ExoPlayer's repeatMode. See [Player.getRepeatMode]
-     * However, ExoPlayer's repeatMode ist based on an integer, while NewPayer defines it as
+     * However, ExoPlayer's repeatMode is based on an integer, while NewPayer defines it as
      * an enum class.
      */
     var repeatMode: RepeatMode
@@ -182,7 +182,7 @@ interface NewPlayer {
      *
      * @param item the item of the stream during which playback failed.
      * @param mediaItem the [MediaItem] of the stream during which playback failed.
-     * @param excpetion the exception that occurred in ExoPlayer.
+     * @param exception the exception that occurred in ExoPlayer.
      * @param repository the [MediaRepository] that NewPlayer utilizes.
      * @return an implementation of StreamExceptionResponse. This tells NewPlayer how to deal with the exception.
      */

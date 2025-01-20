@@ -160,7 +160,7 @@ internal fun TopUI(
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.List,
-                    contentDescription = stringResource(R.string.widget_descriptoin_playlist_item_selection)
+                    contentDescription = stringResource(R.string.widget_description_playlist_item_selection)
                 )
             }
         }
