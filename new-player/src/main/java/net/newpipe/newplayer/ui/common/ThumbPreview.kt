@@ -28,28 +28,12 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -64,9 +48,9 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.media3.common.util.UnstableApi
 import net.newpipe.newplayer.R
-import net.newpipe.newplayer.uiModel.NewPlayerUIState
 import net.newpipe.newplayer.ui.seeker.SeekerDefaults
 import net.newpipe.newplayer.ui.theme.VideoPlayerTheme
+import net.newpipe.newplayer.uiModel.NewPlayerUIState
 
 private const val BOX_PADDING = 4
 
@@ -80,7 +64,7 @@ internal fun ThumbPreview(
     thumbSize: Dp = SeekerDefaults.ThumbRadius * 2,
     additionalStartPaddingPxls: Int = 0,
     additionalEndPaddingPxls: Int = 0,
-    previewHeight: Dp = 60.dp
+    previewHeight: Dp = 60.dp,
 ) {
 
     val thumbSizePxls = with(LocalDensity.current) { thumbSize.toPx() }
@@ -111,45 +95,61 @@ internal fun ThumbPreview(
         else
             previewPosition - (previewBoxWidthPxls / 2 + boxPaddingPxls)
 
+    fun getHeight(): Dp {
+        var internalHeight = (2 * BOX_PADDING).dp + previewHeight
+        if (uiState.currentSeekPreviewChapter != null) {
+            internalHeight += 16.dp
+        }
+        return internalHeight
+    }
+
+
     Box(
         modifier
             .fillMaxWidth()
-            .height((2 * BOX_PADDING).dp + previewHeight)
+            .height(getHeight())
             .onGloballyPositioned { rect ->
                 sliderBoxWidth = rect.size.width
-            }) {
+            }
+    ) {
 
         AnimatedVisibility(
             visible = uiState.seekPreviewVisible && uiState.currentSeekPreviewThumbnail != null,
             enter = fadeIn(animationSpec = tween(200)),
             exit = fadeOut(animationSpec = tween(400))
         ) {
-            Box(modifier = Modifier.fillMaxSize()) {
-                var lastAvailableImage by remember {
-                    mutableStateOf(uiState.currentSeekPreviewThumbnail)
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                uiState.currentSeekPreviewChapter?.chapterTitle?.let { chapterTitle ->
+                    Text(uiState.currentSeekPreviewChapter.chapterTitle)
                 }
-                if (uiState.currentSeekPreviewThumbnail != null) {
-                    lastAvailableImage = uiState.currentSeekPreviewThumbnail
-                }
-
-                Box(
-                    modifier = Modifier
-                        .wrapContentSize()
-                        .offset { IntOffset(edgeCorrectedPreviewPosition.toInt(), 0) },
-                ) {
-                    Card(
+                Box(modifier = Modifier.fillMaxSize()) {
+                    var lastAvailableImage by remember {
+                        mutableStateOf(uiState.currentSeekPreviewThumbnail)
+                    }
+                    if (uiState.currentSeekPreviewThumbnail != null) {
+                        lastAvailableImage = uiState.currentSeekPreviewThumbnail
+                    }
+                    Box(
                         modifier = Modifier
-                            .padding(BOX_PADDING.dp)
-                            .fillMaxHeight()
-                            .aspectRatio(aspectRatio),
-                        elevation = CardDefaults.cardElevation(BOX_PADDING.dp)
+                            .wrapContentSize()
+                            .offset { IntOffset(edgeCorrectedPreviewPosition.toInt(), 0) },
                     ) {
-                        lastAvailableImage?.let {
-                            Image(
-                                modifier = Modifier.fillMaxSize(),
-                                bitmap = it,
-                                contentDescription = stringResource(id = R.string.seek_thumb_preview)
-                            )
+                        Card(
+                            modifier = Modifier
+                                .padding(BOX_PADDING.dp)
+                                .fillMaxHeight()
+                                .aspectRatio(aspectRatio),
+                            elevation = CardDefaults.cardElevation(BOX_PADDING.dp)
+                        ) {
+                            lastAvailableImage?.let {
+                                Image(
+                                    modifier = Modifier.fillMaxSize(),
+                                    bitmap = it,
+                                    contentDescription = stringResource(id = R.string.seek_thumb_preview)
+                                )
+                            }
                         }
                     }
                 }
