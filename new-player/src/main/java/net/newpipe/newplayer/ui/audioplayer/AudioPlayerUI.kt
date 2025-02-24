@@ -31,6 +31,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -56,20 +58,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.media3.common.util.UnstableApi
 import net.newpipe.newplayer.R
-import net.newpipe.newplayer.uiModel.NewPlayerUIState
-import net.newpipe.newplayer.uiModel.InternalNewPlayerViewModel
-import net.newpipe.newplayer.uiModel.NewPlayerViewModelDummy
-import net.newpipe.newplayer.uiModel.UIModeState
 import net.newpipe.newplayer.ui.common.NewPlayerSeeker
 import net.newpipe.newplayer.ui.common.ThumbPreview
-import net.newpipe.newplayer.ui.selection_ui.ChapterSelectUI
-import net.newpipe.newplayer.ui.selection_ui.StreamSelectUI
-import net.newpipe.newplayer.ui.theme.VideoPlayerTheme
 import net.newpipe.newplayer.ui.common.Thumbnail
 import net.newpipe.newplayer.ui.common.getInsets
 import net.newpipe.newplayer.ui.common.getLocale
 import net.newpipe.newplayer.ui.common.getTimeStringFromMs
 import net.newpipe.newplayer.ui.seeker.SeekerDefaults
+import net.newpipe.newplayer.ui.selection_ui.ChapterSelectUI
+import net.newpipe.newplayer.ui.selection_ui.StreamSelectUI
+import net.newpipe.newplayer.ui.theme.VideoPlayerTheme
+import net.newpipe.newplayer.uiModel.InternalNewPlayerViewModel
+import net.newpipe.newplayer.uiModel.NewPlayerUIState
+import net.newpipe.newplayer.uiModel.NewPlayerViewModelDummy
+import net.newpipe.newplayer.uiModel.UIModeState
 
 
 private val UI_ENTER_ANIMATION = fadeIn(tween(200))
@@ -88,7 +90,11 @@ internal fun lightAudioControlButtonColorScheme() = ButtonDefaults.buttonColors(
 @Composable
 
 /** @hide */
-internal fun AudioPlayerUI(viewModel: InternalNewPlayerViewModel, uiState: NewPlayerUIState, isLandScape: Boolean) {
+internal fun AudioPlayerUI(
+    viewModel: InternalNewPlayerViewModel,
+    uiState: NewPlayerUIState,
+    isLandScape: Boolean
+) {
     val insets = getInsets()
 
     Box(
@@ -157,71 +163,72 @@ private fun LandscapeLayout(
     uiState: NewPlayerUIState,
     innerPadding: PaddingValues
 ) {
-    Row(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(20.dp)
-    ) {
-        Column(
+    Column {
+        TitleView(
             modifier = Modifier
+                .fillMaxWidth(), uiState = uiState
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        Row(
+            modifier = modifier
                 .fillMaxSize()
-                .weight(1f)
+                .padding(innerPadding)
         ) {
-            CoverArt(
+            Box(modifier = Modifier.fillMaxSize().weight(1f)) {
+                CoverArt(
+                    modifier = Modifier, uiState = uiState
+                )
+            }
+
+            Box(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .weight(0.9f), uiState = uiState
+                    .width(20.dp)
+                    .fillMaxHeight()
             )
 
-            TitleView(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .weight(0.1f), uiState = uiState
-            )
-        }
-
-        Box(modifier = Modifier.width(20.dp))
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .weight(1f)
-        ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .weight(1f)
             ) {
-                Box(
+                Column(
                     modifier = Modifier
                         .fillMaxSize()
                         .weight(1f)
-                )
-                AudioPlaybackController(
-                    viewModel = viewModel,
-                    uiState = uiState
-                )
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .weight(1f)
+                    )
+                    AudioPlaybackController(
+                        viewModel = viewModel,
+                        uiState = uiState
+                    )
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .weight(1f)
+                    )
+                    ProgressUI(
+                        viewModel = viewModel,
+                        uiState = uiState
+                    )
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .weight(1f)
+                    )
+                }
+                AudioBottomUI(viewModel, uiState)
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .weight(1f)
-                )
-                ProgressUI(
-                    viewModel = viewModel,
-                    uiState = uiState
-                )
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(1f)
+                        .weight(0.025f)
                 )
             }
-            AudioBottomUI(viewModel, uiState)
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .weight(0.025f)
-            )
         }
     }
 }
@@ -363,7 +370,7 @@ private fun TitleView(modifier: Modifier = Modifier, uiState: NewPlayerUIState) 
 @OptIn(UnstableApi::class)
 @Composable
 private fun CoverArt(modifier: Modifier = Modifier, uiState: NewPlayerUIState) {
-    Box {
+    Box(modifier = modifier) {
         Card(
             elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
         ) {
