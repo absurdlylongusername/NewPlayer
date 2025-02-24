@@ -202,6 +202,7 @@ class MainActivity : AppCompatActivity() {
      * In a pure compose environment such reconfigurations are not necessary. Since NewPipe
      * might not be fully Compose yet, such hacks are required.
      */
+    @OptIn(UnstableApi::class)
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         if (currentOrientation != newConfig.orientation) {
