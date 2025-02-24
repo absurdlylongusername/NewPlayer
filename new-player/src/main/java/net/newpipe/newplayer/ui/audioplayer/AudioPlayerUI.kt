@@ -166,7 +166,8 @@ private fun LandscapeLayout(
     Column {
         TitleView(
             modifier = Modifier
-                .fillMaxWidth(), uiState = uiState
+                .fillMaxWidth(),
+            uiState = uiState,
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -176,10 +177,12 @@ private fun LandscapeLayout(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            Box(modifier = Modifier.fillMaxSize().weight(1f)) {
-                CoverArt(
-                    modifier = Modifier, uiState = uiState
-                )
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(1f)
+            ) {
+                CoverArt(uiState = uiState)
             }
 
             Box(
