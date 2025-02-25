@@ -149,7 +149,7 @@ fun NewPlayerUI(
             val defaultBrightness = getDefaultBrightness(activity)
 
             setScreenBrightness(
-                uiState.brightness ?: defaultBrightness, activity
+                if (uiState.brightness < 0) defaultBrightness else uiState.brightness, activity
             )
         }
 

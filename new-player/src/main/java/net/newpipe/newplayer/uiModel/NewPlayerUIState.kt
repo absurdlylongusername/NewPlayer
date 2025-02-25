@@ -107,9 +107,9 @@ data class NewPlayerUIState(
     val soundVolume: Float,
 
     /**
-     * The brightness volume. Might be null if the system is in control of the brightness.
+     * The brightness volume. Might be negative if the system is in control of the brightness.
      */
-    val brightness: Float?,
+    val brightness: Float,
 
     /**
      * This is used to restore several values when switching back from a fullscreen view to an
@@ -212,7 +212,7 @@ data class NewPlayerUIState(
             playbackPositionInMs = 0,
             fastSeekSeconds = 0,
             soundVolume = 0f,
-            brightness = null,
+            brightness = -1f,
             embeddedUiConfig = null,
             playList = emptyList(),
             chapters = emptyList(),
