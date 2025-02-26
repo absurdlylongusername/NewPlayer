@@ -31,6 +31,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -42,6 +43,8 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
@@ -95,66 +98,60 @@ internal fun ThumbPreview(
         else
             previewPosition - (previewBoxWidthPxls / 2 + boxPaddingPxls)
 
-    fun getHeight(): Dp {
-        var internalHeight = (2 * BOX_PADDING).dp + previewHeight
-        if (uiState.currentSeekPreviewChapter != null) {
-            internalHeight += 16.dp
-        }
-        return internalHeight
-    }
-
 
     Box(
-        modifier
+        modifier = modifier
             .fillMaxWidth()
-            .height(getHeight())
             .onGloballyPositioned { rect ->
                 sliderBoxWidth = rect.size.width
             }
     ) {
-
         AnimatedVisibility(
             visible = uiState.seekPreviewVisible && uiState.currentSeekPreviewThumbnail != null,
             enter = fadeIn(animationSpec = tween(200)),
-            exit = fadeOut(animationSpec = tween(400))
+            exit = fadeOut(animationSpec = tween(400)),
         ) {
+            // this allows the current thumbnail to remain when animated visibility is being hidden
+            var lastAvailableImage by remember {
+                mutableStateOf(uiState.currentSeekPreviewThumbnail)
+            }
+            if (uiState.currentSeekPreviewThumbnail != null) {
+                lastAvailableImage = uiState.currentSeekPreviewThumbnail
+            }
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .wrapContentSize()
+                    .offset { IntOffset(edgeCorrectedPreviewPosition.toInt(), 0) },
             ) {
                 uiState.currentSeekPreviewChapter?.chapterTitle?.let { chapterTitle ->
-                    Text(uiState.currentSeekPreviewChapter.chapterTitle)
+                    Text(
+                        text = chapterTitle,
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.bodySmall,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 2,
+                        modifier = Modifier.width(previewHeight * aspectRatio)
+                    )
                 }
-                Box(modifier = Modifier.fillMaxSize()) {
-                    var lastAvailableImage by remember {
-                        mutableStateOf(uiState.currentSeekPreviewThumbnail)
-                    }
-                    if (uiState.currentSeekPreviewThumbnail != null) {
-                        lastAvailableImage = uiState.currentSeekPreviewThumbnail
-                    }
-                    Box(
-                        modifier = Modifier
-                            .wrapContentSize()
-                            .offset { IntOffset(edgeCorrectedPreviewPosition.toInt(), 0) },
-                    ) {
-                        Card(
-                            modifier = Modifier
-                                .padding(BOX_PADDING.dp)
-                                .fillMaxHeight()
-                                .aspectRatio(aspectRatio),
-                            elevation = CardDefaults.cardElevation(BOX_PADDING.dp)
-                        ) {
-                            lastAvailableImage?.let {
-                                Image(
-                                    modifier = Modifier.fillMaxSize(),
-                                    bitmap = it,
-                                    contentDescription = stringResource(id = R.string.seek_thumb_preview)
-                                )
-                            }
-                        }
+                Card(
+                    modifier = Modifier
+                        .padding(BOX_PADDING.dp)
+                        .height((2 * BOX_PADDING).dp + previewHeight)
+                        .aspectRatio(aspectRatio),
+                    elevation = CardDefaults.cardElevation(BOX_PADDING.dp)
+                ) {
+                    lastAvailableImage?.let {
+                        Image(
+                            modifier = Modifier.fillMaxSize(),
+                            bitmap = it,
+                            contentDescription = stringResource(id = R.string.seek_thumb_preview)
+                        )
                     }
                 }
             }
         }
+
 
         /* This is a little helper block that helps place the thumbnail correctly relative to the
         thumb of the seeker. This is only there for debug reasons.
@@ -165,7 +162,6 @@ internal fun ThumbPreview(
         ) {
         }
         */
-
     }
 }
 
