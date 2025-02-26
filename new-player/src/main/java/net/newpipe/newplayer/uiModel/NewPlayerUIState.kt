@@ -21,18 +21,14 @@
 package net.newpipe.newplayer.uiModel
 
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.media3.common.Player
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
+import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
-import net.newpipe.newplayer.data.Chapter
-import net.newpipe.newplayer.ui.ContentScale
-import net.newpipe.newplayer.data.AudioStreamTrack
-import net.newpipe.newplayer.data.RepeatMode
-import net.newpipe.newplayer.data.StreamTrack
-import net.newpipe.newplayer.data.VideoStreamTrack
-import net.newpipe.newplayer.ui.NewPlayerUI
 import net.newpipe.newplayer.NewPlayer
+import net.newpipe.newplayer.data.*
+import net.newpipe.newplayer.ui.ContentScale
+import net.newpipe.newplayer.ui.NewPlayerUI
 
 /**
  * Shows the state the UI is rendering. In the manner of MVVM, [NewPlayerViewModel] sends this
@@ -189,6 +185,12 @@ data class NewPlayerUIState(
     val currentSeekPreviewThumbnail: ImageBitmap?,
 
     /**
+     * The seeker preview chapter that should be visible. This updates if the user uses
+     * the seeker thumb to seek through a stream. If null no chapter is available.
+     */
+    val currentSeekPreviewChapter: Chapter?,
+
+    /**
      * Depicts weather the seeker preview thumbnail should be visible or not.
      */
     val seekPreviewVisible: Boolean,
@@ -225,6 +227,7 @@ data class NewPlayerUIState(
             currentlyPlayingTracks = emptyList(),
             enteringPip = false,
             currentSeekPreviewThumbnail = null,
+            currentSeekPreviewChapter = null,
             seekPreviewVisible = false,
         )
 
