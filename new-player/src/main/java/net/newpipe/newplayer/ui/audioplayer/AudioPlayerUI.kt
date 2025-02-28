@@ -27,16 +27,18 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.basicMarquee
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
@@ -50,26 +52,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.em
 import androidx.media3.common.util.UnstableApi
 import net.newpipe.newplayer.R
-import net.newpipe.newplayer.uiModel.NewPlayerUIState
-import net.newpipe.newplayer.uiModel.InternalNewPlayerViewModel
-import net.newpipe.newplayer.uiModel.NewPlayerViewModelDummy
-import net.newpipe.newplayer.uiModel.UIModeState
 import net.newpipe.newplayer.ui.common.NewPlayerSeeker
 import net.newpipe.newplayer.ui.common.ThumbPreview
-import net.newpipe.newplayer.ui.selection_ui.ChapterSelectUI
-import net.newpipe.newplayer.ui.selection_ui.StreamSelectUI
-import net.newpipe.newplayer.ui.theme.VideoPlayerTheme
 import net.newpipe.newplayer.ui.common.Thumbnail
 import net.newpipe.newplayer.ui.common.getInsets
 import net.newpipe.newplayer.ui.common.getLocale
 import net.newpipe.newplayer.ui.common.getTimeStringFromMs
 import net.newpipe.newplayer.ui.seeker.SeekerDefaults
+import net.newpipe.newplayer.ui.selection_ui.ChapterSelectUI
+import net.newpipe.newplayer.ui.selection_ui.StreamSelectUI
+import net.newpipe.newplayer.ui.theme.VideoPlayerTheme
+import net.newpipe.newplayer.uiModel.InternalNewPlayerViewModel
+import net.newpipe.newplayer.uiModel.NewPlayerUIState
+import net.newpipe.newplayer.uiModel.NewPlayerViewModelDummy
+import net.newpipe.newplayer.uiModel.UIModeState
 
 
 private val UI_ENTER_ANIMATION = fadeIn(tween(200))
@@ -88,7 +88,11 @@ internal fun lightAudioControlButtonColorScheme() = ButtonDefaults.buttonColors(
 @Composable
 
 /** @hide */
-internal fun AudioPlayerUI(viewModel: InternalNewPlayerViewModel, uiState: NewPlayerUIState, isLandScape: Boolean) {
+internal fun AudioPlayerUI(
+    viewModel: InternalNewPlayerViewModel,
+    uiState: NewPlayerUIState,
+    isLandScape: Boolean
+) {
     val insets = getInsets()
 
     Box(
@@ -125,23 +129,22 @@ internal fun AudioPlayerUI(viewModel: InternalNewPlayerViewModel, uiState: NewPl
             enter = UI_ENTER_ANIMATION,
             exit = UI_EXIT_ANIMATION
         ) {
-            Scaffold(modifier = Modifier
-                .fillMaxSize()
-                .windowInsetsPadding(insets),
-                topBar = {
-
-                }) { innerPadding ->
+            Scaffold(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .windowInsetsPadding(insets),
+            ) { innerPadding ->
                 if (isLandScape) {
                     LandscapeLayout(
                         viewModel = viewModel,
                         uiState = uiState,
-                        innerPadding = innerPadding
+                        modifier = Modifier.padding(innerPadding).padding(16.dp),
                     )
                 } else {
                     PortraitLayout(
                         viewModel = viewModel,
                         uiState = uiState,
-                        innerPadding = innerPadding
+                        modifier = Modifier.padding(innerPadding).padding(16.dp),
                     )
                 }
             }
@@ -152,76 +155,36 @@ internal fun AudioPlayerUI(viewModel: InternalNewPlayerViewModel, uiState: NewPl
 @OptIn(UnstableApi::class)
 @Composable
 private fun LandscapeLayout(
-    modifier: Modifier = Modifier,
     viewModel: InternalNewPlayerViewModel,
     uiState: NewPlayerUIState,
-    innerPadding: PaddingValues
+    modifier: Modifier = Modifier,
 ) {
-    Row(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(20.dp)
-    ) {
-        Column(
+    Column (modifier = modifier) {
+        TitleView(
             modifier = Modifier
-                .fillMaxSize()
-                .weight(1f)
+                .fillMaxWidth(),
+            uiState = uiState,
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(32.dp),
         ) {
             CoverArt(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .weight(0.9f), uiState = uiState
+                uiState = uiState,
+                modifier = Modifier.weight(1f)
             )
 
-            TitleView(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .weight(0.1f), uiState = uiState
-            )
-        }
-
-        Box(modifier = Modifier.width(20.dp))
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .weight(1f)
-        ) {
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .weight(1f)
+                verticalArrangement = Arrangement.SpaceEvenly,
+                modifier = Modifier.fillMaxHeight().weight(1f)
             ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(1f)
-                )
-                AudioPlaybackController(
-                    viewModel = viewModel,
-                    uiState = uiState
-                )
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(1f)
-                )
-                ProgressUI(
-                    viewModel = viewModel,
-                    uiState = uiState
-                )
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(1f)
-                )
+                AudioPlaybackController(viewModel = viewModel, uiState = uiState)
+                ProgressUI(viewModel = viewModel, uiState = uiState)
+                AudioBottomUI(viewModel = viewModel, uiState = uiState)
             }
-            AudioBottomUI(viewModel, uiState)
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .weight(0.025f)
-            )
         }
     }
 }
@@ -229,68 +192,29 @@ private fun LandscapeLayout(
 @OptIn(UnstableApi::class)
 @Composable
 private fun PortraitLayout(
-    modifier: Modifier = Modifier,
     viewModel: InternalNewPlayerViewModel,
     uiState: NewPlayerUIState,
-    innerPadding: PaddingValues
+    modifier: Modifier = Modifier,
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(innerPadding)
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(32.dp),
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxHeight()
+                .weight(1f),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(20.dp)
-                    .weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(0.5f)
-                )
-                CoverArt(uiState = uiState)
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(0.3f)
-                )
-
-                TitleView(uiState = uiState)
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(0.45f)
-                )
-                AudioPlaybackController(viewModel = viewModel, uiState = uiState)
-
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(0.2f)
-                )
-                ProgressUI(viewModel = viewModel, uiState = uiState)
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(0.2f)
-                )
-            }
-            AudioBottomUI(viewModel, uiState)
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .weight(0.025f)
-            )
+            CoverArt(uiState = uiState)
+            Spacer(modifier = Modifier.height(24.dp))
+            TitleView(uiState = uiState)
         }
+        AudioPlaybackController(viewModel = viewModel, uiState = uiState)
+        ProgressUI(viewModel = viewModel, uiState = uiState)
+        AudioBottomUI(viewModel, uiState)
     }
 }
 
@@ -347,15 +271,16 @@ private fun TitleView(modifier: Modifier = Modifier, uiState: NewPlayerUIState) 
     Column(modifier = modifier) {
         Text(
             text = uiState.currentlyPlaying?.mediaMetadata?.title.toString(),
-            overflow = TextOverflow.Ellipsis,
             maxLines = 1,
-            fontSize = 6.em
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.basicMarquee(),
         )
+        Spacer(modifier = Modifier.height(6.dp))
         Text(
             text = uiState.currentlyPlaying?.mediaMetadata?.artist.toString(),
-            overflow = TextOverflow.Ellipsis,
             maxLines = 1,
-            fontSize = 4.em
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.basicMarquee(),
         )
     }
 }
@@ -363,7 +288,7 @@ private fun TitleView(modifier: Modifier = Modifier, uiState: NewPlayerUIState) 
 @OptIn(UnstableApi::class)
 @Composable
 private fun CoverArt(modifier: Modifier = Modifier, uiState: NewPlayerUIState) {
-    Box {
+    Box(modifier = modifier) {
         Card(
             elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
         ) {
