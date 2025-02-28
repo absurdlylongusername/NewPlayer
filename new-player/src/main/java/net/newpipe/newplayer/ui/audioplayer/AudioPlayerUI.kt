@@ -27,6 +27,8 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.basicMarquee
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -131,23 +133,22 @@ internal fun AudioPlayerUI(
             enter = UI_ENTER_ANIMATION,
             exit = UI_EXIT_ANIMATION
         ) {
-            Scaffold(modifier = Modifier
-                .fillMaxSize()
-                .windowInsetsPadding(insets),
-                topBar = {
-
-                }) { innerPadding ->
+            Scaffold(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .windowInsetsPadding(insets),
+            ) { innerPadding ->
                 if (isLandScape) {
                     LandscapeLayout(
                         viewModel = viewModel,
                         uiState = uiState,
-                        innerPadding = innerPadding
+                        modifier = Modifier.padding(innerPadding).padding(16.dp),
                     )
                 } else {
                     PortraitLayout(
                         viewModel = viewModel,
                         uiState = uiState,
-                        innerPadding = innerPadding
+                        modifier = Modifier.padding(innerPadding).padding(16.dp),
                     )
                 }
             }
@@ -158,79 +159,35 @@ internal fun AudioPlayerUI(
 @OptIn(UnstableApi::class)
 @Composable
 private fun LandscapeLayout(
-    modifier: Modifier = Modifier,
     viewModel: InternalNewPlayerViewModel,
     uiState: NewPlayerUIState,
-    innerPadding: PaddingValues
+    modifier: Modifier = Modifier,
 ) {
-    Column {
+    Column (modifier = modifier) {
         TitleView(
             modifier = Modifier
                 .fillMaxWidth(),
             uiState = uiState,
         )
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         Row(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(innerPadding)
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(32.dp),
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .weight(1f)
-            ) {
-                CoverArt(uiState = uiState)
-            }
-
-            Box(
-                modifier = Modifier
-                    .width(20.dp)
-                    .fillMaxHeight()
+            CoverArt(
+                uiState = uiState,
+                modifier = Modifier.weight(1f)
             )
 
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .weight(1f)
+                verticalArrangement = Arrangement.SpaceEvenly,
+                modifier = Modifier.fillMaxHeight().weight(1f)
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(1f)
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .weight(1f)
-                    )
-                    AudioPlaybackController(
-                        viewModel = viewModel,
-                        uiState = uiState
-                    )
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .weight(1f)
-                    )
-                    ProgressUI(
-                        viewModel = viewModel,
-                        uiState = uiState
-                    )
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .weight(1f)
-                    )
-                }
-                AudioBottomUI(viewModel, uiState)
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(0.025f)
-                )
+                AudioPlaybackController(viewModel = viewModel, uiState = uiState)
+                ProgressUI(viewModel = viewModel, uiState = uiState)
+                AudioBottomUI(viewModel = viewModel, uiState = uiState)
             }
         }
     }
@@ -239,68 +196,29 @@ private fun LandscapeLayout(
 @OptIn(UnstableApi::class)
 @Composable
 private fun PortraitLayout(
-    modifier: Modifier = Modifier,
     viewModel: InternalNewPlayerViewModel,
     uiState: NewPlayerUIState,
-    innerPadding: PaddingValues
+    modifier: Modifier = Modifier,
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(innerPadding)
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(32.dp),
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxHeight()
+                .weight(1f),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(20.dp)
-                    .weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(0.5f)
-                )
-                CoverArt(uiState = uiState)
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(0.3f)
-                )
-
-                TitleView(uiState = uiState)
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(0.45f)
-                )
-                AudioPlaybackController(viewModel = viewModel, uiState = uiState)
-
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(0.2f)
-                )
-                ProgressUI(viewModel = viewModel, uiState = uiState)
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(0.2f)
-                )
-            }
-            AudioBottomUI(viewModel, uiState)
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .weight(0.025f)
-            )
+            CoverArt(uiState = uiState)
+            Spacer(modifier = Modifier.height(24.dp))
+            TitleView(uiState = uiState)
         }
+        AudioPlaybackController(viewModel = viewModel, uiState = uiState)
+        ProgressUI(viewModel = viewModel, uiState = uiState)
+        AudioBottomUI(viewModel, uiState)
     }
 }
 
@@ -357,15 +275,16 @@ private fun TitleView(modifier: Modifier = Modifier, uiState: NewPlayerUIState) 
     Column(modifier = modifier) {
         Text(
             text = uiState.currentlyPlaying?.mediaMetadata?.title.toString(),
-            overflow = TextOverflow.Ellipsis,
             maxLines = 1,
-            fontSize = 6.em
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.basicMarquee(),
         )
+        Spacer(modifier = Modifier.height(6.dp))
         Text(
             text = uiState.currentlyPlaying?.mediaMetadata?.artist.toString(),
-            overflow = TextOverflow.Ellipsis,
             maxLines = 1,
-            fontSize = 4.em
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.basicMarquee(),
         )
     }
 }
