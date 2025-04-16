@@ -160,27 +160,23 @@ private fun LandscapeLayout(
     modifier: Modifier = Modifier,
 ) {
     Column (modifier = modifier) {
-        TitleView(
-            modifier = Modifier
-                .fillMaxWidth(),
-            uiState = uiState,
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(32.dp),
         ) {
-            CoverArt(
+
+            LandscapeCoverArtOrPlaylistUI(
+                modifier = Modifier.weight(1f),
+                viewModel = viewModel,
                 uiState = uiState,
-                modifier = Modifier.weight(1f)
             )
 
             Column(
                 verticalArrangement = Arrangement.SpaceEvenly,
                 modifier = Modifier.fillMaxHeight().weight(1f)
             ) {
+                Spacer(modifier = Modifier.height(18.dp))
                 AudioPlaybackController(viewModel = viewModel, uiState = uiState)
                 ProgressUI(viewModel = viewModel, uiState = uiState)
                 AudioBottomUI(viewModel = viewModel, uiState = uiState)
@@ -201,20 +197,55 @@ private fun PortraitLayout(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(32.dp),
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxHeight()
-                .weight(1f),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-        ) {
-            CoverArt(uiState = uiState)
-            Spacer(modifier = Modifier.height(24.dp))
-            TitleView(uiState = uiState)
-        }
+        PortraitCoverArtOrPlaylistUI(modifier = Modifier.fillMaxHeight().weight(1f),
+            viewModel = viewModel,
+            uiState = uiState,
+            false)
         AudioPlaybackController(viewModel = viewModel, uiState = uiState)
         ProgressUI(viewModel = viewModel, uiState = uiState)
         AudioBottomUI(viewModel, uiState)
+    }
+}
+
+@OptIn(UnstableApi::class)
+@Composable
+private fun PortraitCoverArtOrPlaylistUI(
+    modifier: Modifier = Modifier,
+    viewModel: InternalNewPlayerViewModel,
+    uiState: NewPlayerUIState,
+    isPlaylistView: Boolean = false
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        CoverArt(uiState = uiState)
+        Spacer(modifier = Modifier.height(24.dp))
+        TitleView(uiState = uiState)
+    }
+}
+
+@OptIn(UnstableApi::class)
+@Composable
+private fun LandscapeCoverArtOrPlaylistUI(
+    modifier: Modifier = Modifier,
+    viewModel: InternalNewPlayerViewModel,
+    uiState: NewPlayerUIState,
+    isPlaylistView: Boolean = false
+) {
+    Column(modifier = modifier) {
+        TitleView(
+            modifier = Modifier
+                .fillMaxWidth(),
+            uiState = uiState,
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        CoverArt(
+            uiState = uiState
+        )
     }
 }
 
