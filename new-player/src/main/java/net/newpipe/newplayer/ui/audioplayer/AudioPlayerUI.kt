@@ -210,8 +210,7 @@ private fun PortraitLayout(
                 .fillMaxHeight()
                 .weight(1f),
             viewModel = viewModel,
-            uiState = uiState,
-            isPlaylistView = true
+            uiState = uiState
         )
         AudioPlaybackController(viewModel = viewModel, uiState = uiState)
         ProgressUI(viewModel = viewModel, uiState = uiState)
@@ -224,11 +223,10 @@ private fun PortraitLayout(
 private fun PortraitCoverArtOrPlaylistUI(
     modifier: Modifier = Modifier,
     viewModel: InternalNewPlayerViewModel,
-    uiState: NewPlayerUIState,
-    isPlaylistView: Boolean = false
+    uiState: NewPlayerUIState
 ) {
 
-    if (isPlaylistView) {
+    if (uiState.showPlaylistInAudioPlayer) {
         ReorderableStreamItemsList(
             modifier = modifier
                 .fillMaxSize(),
@@ -253,21 +251,30 @@ private fun PortraitCoverArtOrPlaylistUI(
 private fun LandscapeCoverArtOrPlaylistUI(
     modifier: Modifier = Modifier,
     viewModel: InternalNewPlayerViewModel,
-    uiState: NewPlayerUIState,
-    isPlaylistView: Boolean = false
+    uiState: NewPlayerUIState
 ) {
-    Column(modifier = modifier) {
-        TitleView(
-            modifier = Modifier
-                .fillMaxWidth(),
-            uiState = uiState,
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        CoverArt(
+    if (uiState.showPlaylistInAudioPlayer) {
+        ReorderableStreamItemsList(
+            modifier = modifier
+                .fillMaxSize(),
+            viewModel = viewModel,
             uiState = uiState
         )
+    } else {
+
+        Column(modifier = modifier) {
+            TitleView(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                uiState = uiState,
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            CoverArt(
+                uiState = uiState
+            )
+        }
     }
 }
 
@@ -363,7 +370,25 @@ private fun AudioPlayerUIPortraitPreview() {
     VideoPlayerTheme {
         AudioPlayerUI(
             viewModel = NewPlayerViewModelDummy(),
-            uiState = NewPlayerUIState.DUMMY.copy(uiMode = UIModeState.FULLSCREEN_AUDIO),
+            uiState = NewPlayerUIState.DUMMY.copy(
+                uiMode = UIModeState.FULLSCREEN_AUDIO
+            ),
+            isLandScape = false
+        )
+    }
+}
+
+@OptIn(UnstableApi::class)
+@Preview(device = "id:pixel_6", showSystemUi = true)
+@Composable
+private fun AudioPlayerUIPortraitPreviewWithPlaylist() {
+    VideoPlayerTheme {
+        AudioPlayerUI(
+            viewModel = NewPlayerViewModelDummy(),
+            uiState = NewPlayerUIState.DUMMY.copy(
+                uiMode = UIModeState.FULLSCREEN_AUDIO,
+                showPlaylistInAudioPlayer = true
+            ),
             isLandScape = false
         )
     }
@@ -377,6 +402,22 @@ private fun AudioPlayerUILandscapePreview() {
         AudioPlayerUI(
             viewModel = NewPlayerViewModelDummy(),
             uiState = NewPlayerUIState.DUMMY.copy(uiMode = UIModeState.FULLSCREEN_AUDIO),
+            isLandScape = true
+        )
+    }
+}
+
+@OptIn(UnstableApi::class)
+@Preview(device = "spec:parent=pixel_6,orientation=landscape", showSystemUi = true)
+@Composable
+private fun AudioPlayerUILandscapePreviewWithPlaylist() {
+    VideoPlayerTheme {
+        AudioPlayerUI(
+            viewModel = NewPlayerViewModelDummy(),
+            uiState = NewPlayerUIState.DUMMY.copy(
+                uiMode = UIModeState.FULLSCREEN_AUDIO,
+                showPlaylistInAudioPlayer = true
+            ),
             isLandScape = true
         )
     }
