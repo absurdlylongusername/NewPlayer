@@ -110,7 +110,7 @@ internal fun ChapterSelectUI(
 @Composable
 private fun VideoPlayerChannelSelectUIPreview() {
     VideoPlayerTheme {
-        Surface(modifier = Modifier.fillMaxSize(), color = Color.Red) {
+        Surface(modifier = Modifier.fillMaxSize(), color = Color.DarkGray) {
             ChapterSelectUI(
                 viewModel = NewPlayerViewModelDummy(),
                 uiState = NewPlayerUIState.DUMMY,

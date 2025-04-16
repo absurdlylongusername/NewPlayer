@@ -31,6 +31,7 @@ import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -64,6 +65,7 @@ import net.newpipe.newplayer.ui.common.getLocale
 import net.newpipe.newplayer.ui.common.getTimeStringFromMs
 import net.newpipe.newplayer.ui.seeker.SeekerDefaults
 import net.newpipe.newplayer.ui.selection_ui.ChapterSelectUI
+import net.newpipe.newplayer.ui.selection_ui.ReorderableStreamItemsList
 import net.newpipe.newplayer.ui.selection_ui.StreamSelectUI
 import net.newpipe.newplayer.ui.theme.VideoPlayerTheme
 import net.newpipe.newplayer.uiModel.InternalNewPlayerViewModel
@@ -138,13 +140,17 @@ internal fun AudioPlayerUI(
                     LandscapeLayout(
                         viewModel = viewModel,
                         uiState = uiState,
-                        modifier = Modifier.padding(innerPadding).padding(16.dp),
+                        modifier = Modifier
+                            .padding(innerPadding)
+                            .padding(16.dp),
                     )
                 } else {
                     PortraitLayout(
                         viewModel = viewModel,
                         uiState = uiState,
-                        modifier = Modifier.padding(innerPadding).padding(16.dp),
+                        modifier = Modifier
+                            .padding(innerPadding)
+                            .padding(16.dp),
                     )
                 }
             }
@@ -159,7 +165,7 @@ private fun LandscapeLayout(
     uiState: NewPlayerUIState,
     modifier: Modifier = Modifier,
 ) {
-    Column (modifier = modifier) {
+    Column(modifier = modifier) {
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -174,7 +180,9 @@ private fun LandscapeLayout(
 
             Column(
                 verticalArrangement = Arrangement.SpaceEvenly,
-                modifier = Modifier.fillMaxHeight().weight(1f)
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .weight(1f)
             ) {
                 Spacer(modifier = Modifier.height(18.dp))
                 AudioPlaybackController(viewModel = viewModel, uiState = uiState)
@@ -197,10 +205,14 @@ private fun PortraitLayout(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(32.dp),
     ) {
-        PortraitCoverArtOrPlaylistUI(modifier = Modifier.fillMaxHeight().weight(1f),
+        PortraitCoverArtOrPlaylistUI(
+            modifier = Modifier
+                .fillMaxHeight()
+                .weight(1f),
             viewModel = viewModel,
             uiState = uiState,
-            false)
+            isPlaylistView = true
+        )
         AudioPlaybackController(viewModel = viewModel, uiState = uiState)
         ProgressUI(viewModel = viewModel, uiState = uiState)
         AudioBottomUI(viewModel, uiState)
@@ -215,14 +227,24 @@ private fun PortraitCoverArtOrPlaylistUI(
     uiState: NewPlayerUIState,
     isPlaylistView: Boolean = false
 ) {
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-    ) {
-        CoverArt(uiState = uiState)
-        Spacer(modifier = Modifier.height(24.dp))
-        TitleView(uiState = uiState)
+
+    if (isPlaylistView) {
+        ReorderableStreamItemsList(
+            modifier = modifier
+                .fillMaxSize(),
+            viewModel = viewModel,
+            uiState = uiState
+        )
+    } else {
+        Column(
+            modifier = modifier,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+        ) {
+            CoverArt(uiState = uiState)
+            Spacer(modifier = Modifier.height(24.dp))
+            TitleView(uiState = uiState)
+        }
     }
 }
 
