@@ -52,6 +52,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -78,19 +79,25 @@ import net.newpipe.newplayer.uiModel.UIModeState
 private val UI_ENTER_ANIMATION = fadeIn(tween(200))
 private val UI_EXIT_ANIMATION = fadeOut(tween(200))
 
+/**hide*/
 @Composable
-
-/** @hide */
 internal fun lightAudioControlButtonColorScheme() = ButtonDefaults.buttonColors().copy(
     containerColor = MaterialTheme.colorScheme.background,
     contentColor = MaterialTheme.colorScheme.onSurface,
     disabledContainerColor = MaterialTheme.colorScheme.background
 )
 
-@OptIn(UnstableApi::class)
+/**hide*/
 @Composable
+internal fun highlightedLightAudioControlButtonColorScheme() = ButtonDefaults.buttonColors().copy(
+    containerColor = MaterialTheme.colorScheme.outlineVariant,
+    contentColor = MaterialTheme.colorScheme.onSurface,
+    disabledContainerColor = MaterialTheme.colorScheme.background
+)
 
 /** @hide */
+@OptIn(UnstableApi::class)
+@Composable
 internal fun AudioPlayerUI(
     viewModel: InternalNewPlayerViewModel,
     uiState: NewPlayerUIState,

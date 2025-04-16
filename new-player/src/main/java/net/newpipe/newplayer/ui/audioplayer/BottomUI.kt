@@ -113,17 +113,22 @@ internal fun AudioBottomUI(viewModel: InternalNewPlayerViewModel, uiState: NewPl
                 }
             }
 
-            androidx.compose.animation.AnimatedVisibility(visible = 1 < uiState.playList.size) {
-                Button(onClick = {
-                    viewModel.changeUiMode(UIModeState.AUDIO_STREAM_SELECT, embeddedUiConfig)
-                }, colors = lightAudioControlButtonColorScheme()) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.List,
-                        contentDescription = stringResource(
-                            id = R.string.widget_description_playlist_item_selection
-                        )
+            Button(
+                onClick = {
+                    viewModel.showPlaylistInAudioPlayer = !viewModel.showPlaylistInAudioPlayer
+                }, colors =
+                    if (uiState.showPlaylistInAudioPlayer) {
+                        highlightedLightAudioControlButtonColorScheme()
+                    } else {
+                        lightAudioControlButtonColorScheme()
+                    }
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.List,
+                    contentDescription = stringResource(
+                        id = R.string.widget_description_playlist_item_selection
                     )
-                }
+                )
             }
         }
         Menu(viewModel, uiState)
@@ -150,7 +155,8 @@ private fun Menu(viewModel: InternalNewPlayerViewModel, uiState: NewPlayerUIStat
         DropdownMenu(expanded = showMenu, onDismissRequest = { showMenu = false }) {
             val context = LocalContext.current
 
-            DropdownMenuItem(text = { Text(stringResource(R.string.menu_item_playback_speed)) },
+            DropdownMenuItem(
+                text = { Text(stringResource(R.string.menu_item_playback_speed)) },
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Filled.Speed,
@@ -159,12 +165,14 @@ private fun Menu(viewModel: InternalNewPlayerViewModel, uiState: NewPlayerUIStat
                 },
                 onClick = { /*TODO*/
                     showNotYetImplementedToast(context)
-                    showMenu = false })
+                    showMenu = false
+                })
             LanguageMenuItem(uiState = uiState, onClick = {
                 showLanguageMenu = true
                 showMenu = false
             })
-            DropdownMenuItem(text = { Text(stringResource(R.string.menu_item_share_timestamp)) },
+            DropdownMenuItem(
+                text = { Text(stringResource(R.string.menu_item_share_timestamp)) },
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Filled.Share,
@@ -173,8 +181,10 @@ private fun Menu(viewModel: InternalNewPlayerViewModel, uiState: NewPlayerUIStat
                 },
                 onClick = { /*TODO*/
                     showNotYetImplementedToast(context)
-                    showMenu = false })
-            DropdownMenuItem(text = { Text(stringResource(R.string.menu_item_open_in_browser)) },
+                    showMenu = false
+                })
+            DropdownMenuItem(
+                text = { Text(stringResource(R.string.menu_item_open_in_browser)) },
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Filled.Language,
@@ -183,7 +193,8 @@ private fun Menu(viewModel: InternalNewPlayerViewModel, uiState: NewPlayerUIStat
                 },
                 onClick = { /*TODO*/
                     showNotYetImplementedToast(context)
-                    showMenu = false })
+                    showMenu = false
+                })
 
             if (supportsPip(LocalContext.current)) {
                 DropdownMenuItem(
@@ -217,7 +228,10 @@ private fun Menu(viewModel: InternalNewPlayerViewModel, uiState: NewPlayerUIStat
 private fun AudioBottomUIPreview() {
     VideoPlayerTheme {
         Box(modifier = Modifier.fillMaxWidth()) {
-            AudioBottomUI(viewModel = NewPlayerViewModelDummy(), uiState = NewPlayerUIState.DUMMY)
+            AudioBottomUI(
+                viewModel = NewPlayerViewModelDummy(),
+                uiState = NewPlayerUIState.DUMMY.copy(showPlaylistInAudioPlayer = true)
+            )
         }
     }
 }

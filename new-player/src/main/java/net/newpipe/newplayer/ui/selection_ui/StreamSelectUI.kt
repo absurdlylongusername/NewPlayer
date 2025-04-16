@@ -54,10 +54,10 @@ import sh.calvin.reorderable.rememberReorderableLazyListState
 /** @hide */
 internal val ITEM_CORNER_SHAPE = RoundedCornerShape(10.dp)
 
-@OptIn(UnstableApi::class)
-@Composable
 
 /** @hide */
+@OptIn(UnstableApi::class)
+@Composable
 internal fun StreamSelectUI(
     viewModel: InternalNewPlayerViewModel,
     uiState: NewPlayerUIState,
@@ -89,6 +89,7 @@ internal fun StreamSelectUI(
     }
 }
 
+/**hide*/
 @OptIn(UnstableApi::class)
 @Composable
 internal fun ReorderableStreamItemsList(

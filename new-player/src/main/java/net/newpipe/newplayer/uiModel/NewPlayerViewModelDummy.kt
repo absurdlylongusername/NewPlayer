@@ -23,6 +23,7 @@ open class NewPlayerViewModelDummy : InternalNewPlayerViewModel {
     override val embeddedPlayerDraggedDownBy = MutableSharedFlow<Float>().asSharedFlow()
     override val onBackPressed: SharedFlow<Unit> = MutableSharedFlow<Unit>().asSharedFlow()
     override var deviceInPowerSaveMode: Boolean = false
+    override var showPlaylistInAudioPlayer: Boolean = false
 
     override fun initUIState(instanceState: Bundle) {
         println("dummy impl")
