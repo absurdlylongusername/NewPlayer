@@ -98,18 +98,20 @@ internal fun StreamSelectTopBar(
                 )
             }
 
-            IconButton(
-                onClick = {
-                    viewModel.changeUiMode(
-                        uiState.uiMode.getNextModeWhenBackPressed() ?: uiState.uiMode,
-                        embeddedUiConfig
+            if (uiState.uiMode.isStreamSelect || uiState.uiMode.isChapterSelect) {
+                IconButton(
+                    onClick = {
+                        viewModel.changeUiMode(
+                            uiState.uiMode.getNextModeWhenBackPressed() ?: uiState.uiMode,
+                            embeddedUiConfig
+                        )
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Close,
+                        contentDescription = stringResource(R.string.close_stream_selection)
                     )
                 }
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Close,
-                    contentDescription = stringResource(R.string.close_stream_selection)
-                )
             }
         })
 }

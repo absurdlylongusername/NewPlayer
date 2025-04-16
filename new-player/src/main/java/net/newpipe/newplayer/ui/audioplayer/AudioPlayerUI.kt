@@ -66,6 +66,7 @@ import net.newpipe.newplayer.ui.common.getTimeStringFromMs
 import net.newpipe.newplayer.ui.seeker.SeekerDefaults
 import net.newpipe.newplayer.ui.selection_ui.ChapterSelectUI
 import net.newpipe.newplayer.ui.selection_ui.ReorderableStreamItemsList
+import net.newpipe.newplayer.ui.selection_ui.StreamSelectTopBar
 import net.newpipe.newplayer.ui.selection_ui.StreamSelectUI
 import net.newpipe.newplayer.ui.theme.VideoPlayerTheme
 import net.newpipe.newplayer.uiModel.InternalNewPlayerViewModel
@@ -135,6 +136,12 @@ internal fun AudioPlayerUI(
                 modifier = Modifier
                     .fillMaxSize()
                     .windowInsetsPadding(insets),
+                topBar =
+                    {
+                        if (uiState.showPlaylistInAudioPlayer && !isLandScape) {
+                            StreamSelectTopBar(viewModel = viewModel, uiState = uiState)
+                        }
+                    }
             ) { innerPadding ->
                 if (isLandScape) {
                     LandscapeLayout(
@@ -184,7 +191,15 @@ private fun LandscapeLayout(
                     .fillMaxHeight()
                     .weight(1f)
             ) {
-                Spacer(modifier = Modifier.height(18.dp))
+                if(uiState.showPlaylistInAudioPlayer) {
+                    StreamSelectTopBar(viewModel = viewModel, uiState = uiState)
+
+                    Spacer(modifier = Modifier.height(8.dp))
+                } else {
+                    Spacer(modifier = Modifier.height(18.dp))
+                }
+
+
                 AudioPlaybackController(viewModel = viewModel, uiState = uiState)
                 ProgressUI(viewModel = viewModel, uiState = uiState)
                 AudioBottomUI(viewModel = viewModel, uiState = uiState)
@@ -261,7 +276,6 @@ private fun LandscapeCoverArtOrPlaylistUI(
             uiState = uiState
         )
     } else {
-
         Column(modifier = modifier) {
             TitleView(
                 modifier = Modifier
