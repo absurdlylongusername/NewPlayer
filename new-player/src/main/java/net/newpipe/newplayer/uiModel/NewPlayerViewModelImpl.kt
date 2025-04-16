@@ -133,6 +133,14 @@ class NewPlayerViewModelImpl @Inject constructor(
             }
         }
 
+    override var showPlaylistInAudioPlayer: Boolean
+        get() = mutableUiState.value.showPlaylistInAudioPlayer
+        set(value) {
+            mutableUiState.update {
+                it.copy(showPlaylistInAudioPlayer = value)
+            }
+        }
+
     private var mutableEmbeddedPlayerDraggedDownBy = MutableSharedFlow<Float>()
     override val embeddedPlayerDraggedDownBy = mutableEmbeddedPlayerDraggedDownBy.asSharedFlow()
 
@@ -395,10 +403,10 @@ class NewPlayerViewModelImpl @Inject constructor(
 
     override fun resetHideDelayTimer() {
         hideUiDelayedJob?.cancel()
-        if(!dialogIsVisible) {
+        if (!dialogIsVisible) {
             hideUiDelayedJob = viewModelScope.launch {
                 delay(2000)
-                if(!dialogIsVisible)
+                if (!dialogIsVisible)
                     changeUiMode(uiState.value.uiMode.getUiHiddenState(), null)
             }
         }
@@ -640,7 +648,7 @@ class NewPlayerViewModelImpl @Inject constructor(
     override fun cycleContentFitMode() {
         mutableUiState.update {
             it.copy(
-                contentFitMode = when(it.contentFitMode) {
+                contentFitMode = when (it.contentFitMode) {
                     ContentScale.STRETCHED -> ContentScale.FIT_INSIDE
                     ContentScale.FIT_INSIDE -> ContentScale.CROP
                     ContentScale.CROP -> ContentScale.STRETCHED

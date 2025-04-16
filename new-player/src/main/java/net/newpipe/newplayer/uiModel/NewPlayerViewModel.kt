@@ -28,6 +28,11 @@ interface NewPlayerViewModel {
     /**
      * Depicts weather the picture of the video should be stretched, fit inside or be cropped.
      * You can set it yourself, but [NewPlayerUI] can also change it.
+     *
+     * You should store this value in the settings database when the ViewModel gets destroyed.
+     * You should then reload this value if the ViewModel gets recreated.
+     * This way you ensure that whatever the user desires to see it stays persistent upon
+     * app restarts.
      */
     var contentFitMode: ContentScale
 
@@ -53,6 +58,17 @@ interface NewPlayerViewModel {
      * It will forward the event to you through this callback.
      */
     val onBackPressed: SharedFlow<Unit>
+
+    /**
+     * If this is set the audio player will display the playlist instead of the thumbnail of the
+     * current stream.
+     *
+     * You should store this value in the settings database when the ViewModel gets destroyed.
+     * You should then reload this value if the ViewModel gets recreated.
+     * This way you ensure that whatever the user desires to see it stays persistent upon
+     * app restarts.
+     */
+    var showPlaylistInAudioPlayer: Boolean
 
     /**
      * This is something you have to call in the Activity that should host the [NewPlayerUI].
