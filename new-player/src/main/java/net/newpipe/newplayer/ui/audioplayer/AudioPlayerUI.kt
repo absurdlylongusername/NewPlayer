@@ -26,6 +26,10 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
@@ -143,12 +147,6 @@ internal fun AudioPlayerUI(
                 modifier = Modifier
                     .fillMaxSize()
                     .windowInsetsPadding(insets),
-                topBar =
-                    {
-                        if (uiState.showPlaylistInAudioPlayer && !isLandScape) {
-                            StreamSelectTopBar(viewModel = viewModel, uiState = uiState)
-                        }
-                    }
             ) { innerPadding ->
                 if (isLandScape) {
                     LandscapeLayout(
@@ -198,14 +196,9 @@ private fun LandscapeLayout(
                     .fillMaxHeight()
                     .weight(1f)
             ) {
-                if(uiState.showPlaylistInAudioPlayer) {
+                AnimatedVisibility(uiState.showPlaylistInAudioPlayer) {
                     StreamSelectTopBar(viewModel = viewModel, uiState = uiState)
-
-                    Spacer(modifier = Modifier.height(8.dp))
-                } else {
-                    Spacer(modifier = Modifier.height(18.dp))
                 }
-
 
                 AudioPlaybackController(viewModel = viewModel, uiState = uiState)
                 ProgressUI(viewModel = viewModel, uiState = uiState)
@@ -223,20 +216,28 @@ private fun PortraitLayout(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier,
+        modifier = Modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(32.dp),
     ) {
-        PortraitCoverArtOrPlaylistUI(
-            modifier = Modifier
-                .fillMaxHeight()
-                .weight(1f),
-            viewModel = viewModel,
-            uiState = uiState
-        )
-        AudioPlaybackController(viewModel = viewModel, uiState = uiState)
-        ProgressUI(viewModel = viewModel, uiState = uiState)
-        AudioBottomUI(viewModel, uiState)
+        androidx.compose.animation.AnimatedVisibility(uiState.showPlaylistInAudioPlayer) {
+            StreamSelectTopBar(viewModel = viewModel, uiState = uiState)
+        }
+        Column(
+            modifier = modifier,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(32.dp),
+        ) {
+            PortraitCoverArtOrPlaylistUI(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .weight(1f),
+                viewModel = viewModel,
+                uiState = uiState
+            )
+            AudioPlaybackController(viewModel = viewModel, uiState = uiState)
+            ProgressUI(viewModel = viewModel, uiState = uiState)
+            AudioBottomUI(viewModel, uiState)
+        }
     }
 }
 
@@ -247,23 +248,26 @@ private fun PortraitCoverArtOrPlaylistUI(
     viewModel: InternalNewPlayerViewModel,
     uiState: NewPlayerUIState
 ) {
+    Box(modifier = modifier.fillMaxSize()) {
+        AnimatedVisibility(uiState.showPlaylistInAudioPlayer, enter = fadeIn(), exit = fadeOut()) {
+            ReorderableStreamItemsList(
+                modifier = Modifier
+                    .fillMaxSize(),
+                viewModel = viewModel,
+                uiState = uiState
+            )
+        }
 
-    if (uiState.showPlaylistInAudioPlayer) {
-        ReorderableStreamItemsList(
-            modifier = modifier
-                .fillMaxSize(),
-            viewModel = viewModel,
-            uiState = uiState
-        )
-    } else {
-        Column(
-            modifier = modifier,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-        ) {
-            CoverArt(uiState = uiState)
-            Spacer(modifier = Modifier.height(24.dp))
-            TitleView(uiState = uiState)
+        AnimatedVisibility(!uiState.showPlaylistInAudioPlayer, enter = fadeIn(), exit = fadeOut()) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                CoverArt(uiState = uiState)
+                Spacer(modifier = Modifier.height(24.dp))
+                TitleView(uiState = uiState)
+            }
         }
     }
 }
@@ -275,26 +279,29 @@ private fun LandscapeCoverArtOrPlaylistUI(
     viewModel: InternalNewPlayerViewModel,
     uiState: NewPlayerUIState
 ) {
-    if (uiState.showPlaylistInAudioPlayer) {
-        ReorderableStreamItemsList(
-            modifier = modifier
-                .fillMaxSize(),
-            viewModel = viewModel,
-            uiState = uiState
-        )
-    } else {
-        Column(modifier = modifier) {
-            TitleView(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                uiState = uiState,
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            CoverArt(
+    Box(modifier = modifier.fillMaxSize()) {
+        AnimatedVisibility(uiState.showPlaylistInAudioPlayer, enter = fadeIn(), exit = fadeOut()) {
+            ReorderableStreamItemsList(
+                modifier = modifier
+                    .fillMaxSize(),
+                viewModel = viewModel,
                 uiState = uiState
             )
+        }
+        AnimatedVisibility(!uiState.showPlaylistInAudioPlayer, enter = fadeIn(), exit = fadeOut()) {
+            Column(modifier = modifier) {
+                TitleView(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    uiState = uiState,
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                CoverArt(
+                    uiState = uiState
+                )
+            }
         }
     }
 }
