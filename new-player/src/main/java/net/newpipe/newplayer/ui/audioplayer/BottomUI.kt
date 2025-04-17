@@ -114,9 +114,8 @@ internal fun AudioBottomUI(viewModel: InternalNewPlayerViewModel, uiState: NewPl
             }
 
             Button(
-                onClick = {
-                    viewModel.showPlaylistInAudioPlayer = !viewModel.showPlaylistInAudioPlayer
-                }, colors =
+                onClick =
+                    viewModel::onShowPlaylistInAudioPlayerToggle, colors =
                     if (uiState.showPlaylistInAudioPlayer) {
                         highlightedLightAudioControlButtonColorScheme()
                     } else {

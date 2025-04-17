@@ -68,9 +68,9 @@ internal fun isActiveChapter(chapterId: Int, chapters: List<Chapter>, playbackPo
     return playbackPosition in chapterStart..<chapterEnd
 }
 
-@Composable
 
 /** @hide */
+@Composable
 internal fun ChapterItem(
     modifier: Modifier = Modifier,
     id: Int,

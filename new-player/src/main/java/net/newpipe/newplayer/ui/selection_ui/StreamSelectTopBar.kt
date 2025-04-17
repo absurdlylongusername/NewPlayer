@@ -52,11 +52,10 @@ import net.newpipe.newplayer.ui.common.getPlaylistDurationInMS
 import net.newpipe.newplayer.ui.common.getTimeStringFromMs
 import net.newpipe.newplayer.ui.common.showNotYetImplementedToast
 
+/** @hide */
 @androidx.annotation.OptIn(UnstableApi::class)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-
-/** @hide */
 internal fun StreamSelectTopBar(
     modifier: Modifier = Modifier,
     viewModel: InternalNewPlayerViewModel,

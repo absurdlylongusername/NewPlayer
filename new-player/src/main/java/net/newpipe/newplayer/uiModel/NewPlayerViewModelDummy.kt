@@ -113,6 +113,10 @@ open class NewPlayerViewModelDummy : InternalNewPlayerViewModel {
         println("dummy reset hide delay timer")
     }
 
+    override fun onShowPlaylistInAudioPlayerToggle() {
+        println("dummy impl")
+    }
+
     override fun onPictureInPictureModeChanged(isPictureInPictureMode: Boolean) {
         println("dummy impl isInPictureInPictureMode: $isPictureInPictureMode")
     }

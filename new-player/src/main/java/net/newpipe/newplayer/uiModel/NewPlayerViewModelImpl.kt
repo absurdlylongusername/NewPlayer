@@ -337,12 +337,18 @@ class NewPlayerViewModelImpl @Inject constructor(
         }
     }
 
+    private fun requiresPlaylistProgressUpdate(uiModeState: UIModeState) =
+        uiModeState.isStreamSelect
+                || (uiModeState.inAudioMode && uiState.value.showPlaylistInAudioPlayer)
+
     override fun changeUiMode(newUiModeState: UIModeState, embeddedUiConfig: EmbeddedUiConfig?) {
         if (newUiModeState == uiState.value.uiMode) {
             return;
         }
 
-        if (!uiState.value.uiMode.fullscreen && newUiModeState.fullscreen && embeddedUiConfig != null) {
+        if (!uiState.value.uiMode.fullscreen
+            && newUiModeState.fullscreen && embeddedUiConfig != null
+        ) {
             this.embeddedUiConfig = embeddedUiConfig
         }
 
@@ -355,7 +361,7 @@ class NewPlayerViewModelImpl @Inject constructor(
             hideUiDelayedJob?.cancel()
         }
 
-        if (newUiModeState.isStreamSelect) {
+        if (requiresPlaylistProgressUpdate(newUiModeState)) {
             startPlaylistProgressUpdaterJob()
         } else {
             playlistProgressUpdaterJob?.cancel()
@@ -409,6 +415,16 @@ class NewPlayerViewModelImpl @Inject constructor(
                 if (!dialogIsVisible)
                     changeUiMode(uiState.value.uiMode.getUiHiddenState(), null)
             }
+        }
+    }
+
+    override fun onShowPlaylistInAudioPlayerToggle() {
+        showPlaylistInAudioPlayer = !showPlaylistInAudioPlayer
+        println("Penis: ${showPlaylistInAudioPlayer}")
+        if (requiresPlaylistProgressUpdate(uiState.value.uiMode)) {
+            startPlaylistProgressUpdaterJob()
+        } else {
+            playlistProgressUpdaterJob?.cancel()
         }
     }
 
