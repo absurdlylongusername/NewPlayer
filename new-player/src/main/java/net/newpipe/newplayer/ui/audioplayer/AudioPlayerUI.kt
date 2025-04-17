@@ -197,7 +197,11 @@ private fun LandscapeLayout(
                     .weight(1f)
             ) {
                 AnimatedVisibility(uiState.showPlaylistInAudioPlayer) {
-                    StreamSelectTopBar(viewModel = viewModel, uiState = uiState)
+                    StreamSelectTopBar(
+                        viewModel = viewModel,
+                        uiState = uiState,
+                        isUsedInAudiPlayer = true
+                    )
                 }
 
                 AudioPlaybackController(viewModel = viewModel, uiState = uiState)
@@ -220,7 +224,7 @@ private fun PortraitLayout(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         androidx.compose.animation.AnimatedVisibility(uiState.showPlaylistInAudioPlayer) {
-            StreamSelectTopBar(viewModel = viewModel, uiState = uiState)
+            StreamSelectTopBar(viewModel = viewModel, uiState = uiState, isUsedInAudiPlayer = true)
         }
         Column(
             modifier = modifier,

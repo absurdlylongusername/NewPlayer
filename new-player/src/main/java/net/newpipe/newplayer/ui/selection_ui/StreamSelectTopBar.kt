@@ -59,7 +59,8 @@ import net.newpipe.newplayer.ui.common.showNotYetImplementedToast
 internal fun StreamSelectTopBar(
     modifier: Modifier = Modifier,
     viewModel: InternalNewPlayerViewModel,
-    uiState: NewPlayerUIState
+    uiState: NewPlayerUIState,
+    isUsedInAudiPlayer: Boolean = false
 ) {
 
     val embeddedUiConfig = getEmbeddedUiConfig()
@@ -97,7 +98,7 @@ internal fun StreamSelectTopBar(
                 )
             }
 
-            if (uiState.uiMode.isStreamSelect || uiState.uiMode.isChapterSelect) {
+            if (!isUsedInAudiPlayer) {
                 IconButton(
                     onClick = {
                         viewModel.changeUiMode(
