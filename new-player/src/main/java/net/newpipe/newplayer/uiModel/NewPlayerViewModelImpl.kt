@@ -420,7 +420,6 @@ class NewPlayerViewModelImpl @Inject constructor(
 
     override fun onShowPlaylistInAudioPlayerToggle() {
         showPlaylistInAudioPlayer = !showPlaylistInAudioPlayer
-        println("Penis: ${showPlaylistInAudioPlayer}")
         if (requiresPlaylistProgressUpdate(uiState.value.uiMode)) {
             startPlaylistProgressUpdaterJob()
         } else {
