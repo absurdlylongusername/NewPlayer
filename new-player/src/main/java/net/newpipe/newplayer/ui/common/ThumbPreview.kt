@@ -98,10 +98,20 @@ internal fun ThumbPreview(
         else
             previewPosition - (previewBoxWidthPxls / 2 + boxPaddingPxls)
 
+    // This function is required to prevent the thumbnail to collapse and glitch during
+    // enter and exit animation.
+    fun getHeight(): Dp {
+        var internalHeight = (2 * BOX_PADDING).dp + previewHeight
+        if (uiState.currentSeekPreviewChapter != null) {
+            internalHeight += 16.dp
+        }
+        return internalHeight
+    }
 
     Box(
         modifier = modifier
             .fillMaxWidth()
+            .height(getHeight())
             .onGloballyPositioned { rect ->
                 sliderBoxWidth = rect.size.width
             }
@@ -111,42 +121,46 @@ internal fun ThumbPreview(
             enter = fadeIn(animationSpec = tween(200)),
             exit = fadeOut(animationSpec = tween(400)),
         ) {
-            // this allows the current thumbnail to remain when animated visibility is being hidden
-            var lastAvailableImage by remember {
-                mutableStateOf(uiState.currentSeekPreviewThumbnail)
-            }
-            if (uiState.currentSeekPreviewThumbnail != null) {
-                lastAvailableImage = uiState.currentSeekPreviewThumbnail
-            }
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .wrapContentSize()
-                    .offset { IntOffset(edgeCorrectedPreviewPosition.toInt(), 0) },
-            ) {
-                uiState.currentSeekPreviewChapter?.chapterTitle?.let { chapterTitle ->
-                    Text(
-                        text = chapterTitle,
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.bodySmall,
-                        overflow = TextOverflow.Ellipsis,
-                        maxLines = 2,
-                        modifier = Modifier.width(previewHeight * aspectRatio)
-                    )
+            // Together with the getHeight() function this Box ensures that the thumbnail
+            // does not collapse and glitch during enter and exit animation.
+            Box(Modifier.fillMaxSize()) {
+                // this allows the current thumbnail to remain when animated visibility is being hidden
+                var lastAvailableImage by remember {
+                    mutableStateOf(uiState.currentSeekPreviewThumbnail)
                 }
-                Card(
+                if (uiState.currentSeekPreviewThumbnail != null) {
+                    lastAvailableImage = uiState.currentSeekPreviewThumbnail
+                }
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
-                        .padding(BOX_PADDING.dp)
-                        .height((2 * BOX_PADDING).dp + previewHeight)
-                        .aspectRatio(aspectRatio),
-                    elevation = CardDefaults.cardElevation(BOX_PADDING.dp)
+                        .wrapContentSize()
+                        .offset { IntOffset(edgeCorrectedPreviewPosition.toInt(), 0) },
                 ) {
-                    lastAvailableImage?.let {
-                        Image(
-                            modifier = Modifier.fillMaxSize(),
-                            bitmap = it,
-                            contentDescription = stringResource(id = R.string.seek_thumb_preview)
+                    uiState.currentSeekPreviewChapter?.chapterTitle?.let { chapterTitle ->
+                        Text(
+                            text = chapterTitle,
+                            textAlign = TextAlign.Center,
+                            style = MaterialTheme.typography.bodySmall,
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 2,
+                            modifier = Modifier.width(previewHeight * aspectRatio)
                         )
+                    }
+                    Card(
+                        modifier = Modifier
+                            .padding(BOX_PADDING.dp)
+                            .height((2 * BOX_PADDING).dp + previewHeight)
+                            .aspectRatio(aspectRatio),
+                        elevation = CardDefaults.cardElevation(BOX_PADDING.dp)
+                    ) {
+                        lastAvailableImage?.let {
+                            Image(
+                                modifier = Modifier.fillMaxSize(),
+                                bitmap = it,
+                                contentDescription = stringResource(id = R.string.seek_thumb_preview)
+                            )
+                        }
                     }
                 }
             }
