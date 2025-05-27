@@ -56,7 +56,7 @@ import net.newpipe.newplayer.uiModel.NewPlayerUIState
 import net.newpipe.newplayer.uiModel.InternalNewPlayerViewModel
 import net.newpipe.newplayer.uiModel.NewPlayerViewModelDummy
 import net.newpipe.newplayer.ui.common.NewPlayerSeeker
-import net.newpipe.newplayer.ui.common.ThumbPreview
+import net.newpipe.newplayer.ui.common.thumb_preview.ThumbPreview
 import net.newpipe.newplayer.ui.theme.VideoPlayerTheme
 import net.newpipe.newplayer.ui.common.getEmbeddedUiConfig
 import net.newpipe.newplayer.ui.common.getLocale

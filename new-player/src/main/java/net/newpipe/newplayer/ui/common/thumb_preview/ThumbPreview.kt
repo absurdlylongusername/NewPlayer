@@ -1,4 +1,4 @@
-package net.newpipe.newplayer.ui.common
+package net.newpipe.newplayer.ui.common.thumb_preview
 
 /* NewPlayer
  *
@@ -31,7 +31,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -41,26 +40,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.media3.common.util.UnstableApi
 import net.newpipe.newplayer.R
+import net.newpipe.newplayer.data.Chapter
 import net.newpipe.newplayer.ui.seeker.SeekerDefaults
 import net.newpipe.newplayer.ui.theme.VideoPlayerTheme
 import net.newpipe.newplayer.uiModel.NewPlayerUIState
 
-private const val BOX_PADDING = 4
-
-@OptIn(UnstableApi::class)
-@Composable
+internal const val PREVIEW_BOX_PADDING = 4
 
 /** @hide */
+@OptIn(UnstableApi::class)
+@Composable
 internal fun ThumbPreview(
     modifier: Modifier = Modifier,
     uiState: NewPlayerUIState,
@@ -70,52 +66,26 @@ internal fun ThumbPreview(
     previewHeight: Dp = 60.dp,
 ) {
 
-    val thumbSizePxls = with(LocalDensity.current) { thumbSize.toPx() }
-    val boxPaddingPxls = with(LocalDensity.current) { BOX_PADDING.dp.toPx() }
-
     var sliderBoxWidth by remember {
         mutableIntStateOf(-1)
     }
 
-    val aspectRatio = if (uiState.currentSeekPreviewThumbnail != null) {
-        uiState.currentSeekPreviewThumbnail.width.toFloat() /
-                uiState.currentSeekPreviewThumbnail.height.toFloat()
-    } else {
-        16f / 9f
-    }
-
-    val previewBoxWidthPxls = with(LocalDensity.current) { (previewHeight * aspectRatio).toPx() }
-
-    val previewPosition = additionalStartPaddingPxls + thumbSizePxls / 2 +
-            ((sliderBoxWidth - additionalEndPaddingPxls - additionalStartPaddingPxls - thumbSizePxls)
-                    * uiState.seekerPosition)
-
-    val edgeCorrectedPreviewPosition =
-        if (previewPosition < (previewBoxWidthPxls / 2 + boxPaddingPxls))
-            0
-        else if ((sliderBoxWidth - (previewBoxWidthPxls / 2 + boxPaddingPxls)) < previewPosition)
-            sliderBoxWidth - previewBoxWidthPxls - 2 * boxPaddingPxls
-        else
-            previewPosition - (previewBoxWidthPxls / 2 + boxPaddingPxls)
-
-    // This function is required to prevent the thumbnail to collapse and glitch during
-    // enter and exit animation.
-    fun getHeight(): Dp {
-        var internalHeight = (2 * BOX_PADDING).dp + previewHeight
-        if (uiState.currentSeekPreviewChapter != null) {
-            internalHeight += 16.dp
-        }
-        return internalHeight
-    }
+    val thumbnailGeometry = calculateThumbnailPreviewGeometry(
+        uiState = uiState,
+        thumbSize = thumbSize,
+        previewHeight = previewHeight,
+        sliderBoxWidth = sliderBoxWidth,
+        additionalStartPaddingPxls = additionalStartPaddingPxls,
+        additionalEndPaddingPxls = additionalEndPaddingPxls
+    )
 
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(getHeight())
+            .height((2 * PREVIEW_BOX_PADDING).dp + previewHeight)
             .onGloballyPositioned { rect ->
                 sliderBoxWidth = rect.size.width
-            }
-    ) {
+            }) {
         AnimatedVisibility(
             visible = uiState.seekPreviewVisible && uiState.currentSeekPreviewThumbnail != null,
             enter = fadeIn(animationSpec = tween(200)),
@@ -123,7 +93,9 @@ internal fun ThumbPreview(
         ) {
             // Together with the getHeight() function this Box ensures that the thumbnail
             // does not collapse and glitch during enter and exit animation.
-            Box(Modifier.fillMaxSize()) {
+            Box(Modifier
+                .fillMaxSize()
+                .background(Color.Red)) {
                 // this allows the current thumbnail to remain when animated visibility is being hidden
                 var lastAvailableImage by remember {
                     mutableStateOf(uiState.currentSeekPreviewThumbnail)
@@ -135,8 +107,9 @@ internal fun ThumbPreview(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .wrapContentSize()
-                        .offset { IntOffset(edgeCorrectedPreviewPosition.toInt(), 0) },
+                        .offset { IntOffset(thumbnailGeometry.edgeCorrectedPreviewPosition, 0) },
                 ) {
+                    /*
                     uiState.currentSeekPreviewChapter?.chapterTitle?.let { chapterTitle ->
                         Text(
                             text = chapterTitle,
@@ -147,12 +120,15 @@ internal fun ThumbPreview(
                             modifier = Modifier.width(previewHeight * aspectRatio)
                         )
                     }
+
+                     */
+
                     Card(
                         modifier = Modifier
-                            .padding(BOX_PADDING.dp)
-                            .height((2 * BOX_PADDING).dp + previewHeight)
-                            .aspectRatio(aspectRatio),
-                        elevation = CardDefaults.cardElevation(BOX_PADDING.dp)
+                            .padding(PREVIEW_BOX_PADDING.dp)
+                            .height((2 * PREVIEW_BOX_PADDING).dp + previewHeight)
+                            .aspectRatio(thumbnailGeometry.aspectRatio),
+                        elevation = CardDefaults.cardElevation(PREVIEW_BOX_PADDING.dp)
                     ) {
                         lastAvailableImage?.let {
                             Image(
@@ -191,7 +167,7 @@ private fun ThumbPreviewPreview() {
     var thumbDown by remember { mutableStateOf(false) }
 
     val previewThumbnail = null
-//        BitmapFactory.decodeResource(LocalContext.current.resources, R.mipmap.thumbnail_preview)
+        BitmapFactory.decodeResource(LocalContext.current.resources, R.mipmap.thumbnail_preview)
 
 
     VideoPlayerTheme {
@@ -204,8 +180,11 @@ private fun ThumbPreviewPreview() {
                 uiState = NewPlayerUIState.DUMMY.copy(
                     seekerPosition = sliderPosition,
                     seekPreviewVisible = thumbDown,
-                    currentSeekPreviewThumbnail = previewThumbnail?.asImageBitmap()
-                ), additionalStartPaddingPxls = startOffset, additionalEndPaddingPxls = endOffset,
+                    currentSeekPreviewThumbnail = previewThumbnail.asImageBitmap(),
+                    currentSeekPreviewChapter = Chapter(0, "What a wonderfull chapter", null)
+                ),
+                additionalStartPaddingPxls = startOffset,
+                additionalEndPaddingPxls = endOffset,
                 thumbSize = 20.dp // see handle width
             )
 
