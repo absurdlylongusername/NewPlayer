@@ -56,8 +56,8 @@ import androidx.core.view.WindowCompat
 import androidx.media3.common.MediaItem
 import androidx.media3.common.util.UnstableApi
 import coil.compose.AsyncImage
-import net.newpipe.newplayer.data.NewPlayerException
 import net.newpipe.newplayer.R
+import net.newpipe.newplayer.data.NewPlayerException
 import net.newpipe.newplayer.uiModel.EmbeddedUiConfig
 import java.util.Locale
 
@@ -67,8 +67,7 @@ import java.util.Locale
  */
 /** @hide */
 @Composable
-internal fun activity(): Activity
-    = LocalContext.current.findActivity()!!
+internal fun activity(): Activity = LocalContext.current.findActivity()!!
 
 /** Call block with the [Activity] from current context, if there is an activity.
  *
@@ -77,7 +76,7 @@ internal fun activity(): Activity
  */
 /** @hide */
 @Composable
-internal fun <T>activity(default: T, block: @Composable Activity.() -> T): T =
+internal fun <T> activity(default: T, block: @Composable Activity.() -> T): T =
     when (val a = LocalContext.current.findActivity()) {
         null -> default
         else -> block(a)
@@ -85,8 +84,7 @@ internal fun <T>activity(default: T, block: @Composable Activity.() -> T): T =
 
 /** @hide */
 @Composable
-internal fun window(): Window
-    = activity().window
+internal fun window(): Window = activity().window
 
 /** @hide */
 internal fun Context.findActivity(): Activity? = when (this) {
@@ -113,8 +111,8 @@ internal fun Activity.getDefaultBrightness(): Float {
     return if (layout.screenBrightness < 0) -1f else layout.screenBrightness
 }
 
-@SuppressLint("NewApi")
 /** @hide */
+@SuppressLint("NewApi")
 internal fun setScreenBrightness(value: Float, activity: Activity) {
     val window = activity.window
     val layout = window.attributes as WindowManager.LayoutParams
@@ -123,11 +121,9 @@ internal fun setScreenBrightness(value: Float, activity: Activity) {
 }
 
 
-
-
+/** @hide */
 @Composable
 @ReadOnlyComposable
-/** @hide */
 internal fun getLocale(): Locale? {
     val configuration = LocalConfiguration.current
     return ConfigurationCompat.getLocales(configuration).get(0)
@@ -136,8 +132,7 @@ internal fun getLocale(): Locale? {
 @Composable
 /** @return A collection of current activity/window configurations */
 /** @hide */
-internal fun getEmbeddedUiConfig()
-    = activity(EmbeddedUiConfig.DUMMY) { getEmbeddedUiConfig() }
+internal fun getEmbeddedUiConfig() = activity(EmbeddedUiConfig.DUMMY) { getEmbeddedUiConfig() }
 
 @Composable
 @ReadOnlyComposable
@@ -159,8 +154,8 @@ internal fun Activity.getEmbeddedUiConfig(): EmbeddedUiConfig {
     )
 }
 
-@Composable
 /** @hide */
+@Composable
 internal fun getInsets() =
     WindowInsets.systemBars.union(WindowInsets.displayCutout).union(WindowInsets.waterfall)
 
@@ -203,9 +198,8 @@ internal fun getTimeStringFromMs(
     return time_string
 }
 
-@Composable
-
 /** @hide */
+@Composable
 internal fun Thumbnail(
     modifier: Modifier = Modifier,
     thumbnail: Uri?,
@@ -236,18 +230,16 @@ internal fun Thumbnail(
     }
 }
 
+/** @hide */
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 @Composable
-
-/** @hide */
 internal fun isInPowerSaveMode() =
     (LocalContext.current.getSystemService(Context.POWER_SERVICE) as PowerManager)
         .isPowerSaveMode
 
 
-@OptIn(UnstableApi::class)
-
 /** @hide */
+@OptIn(UnstableApi::class)
 internal fun getPlaylistDurationInMS(playlist: List<MediaItem>): Long {
     var duration = 0L
     for (item in playlist) {
@@ -273,8 +265,9 @@ internal fun relaunchCurrentActivity(activity: Activity) {
 
 }
 
+/** @hide */
 @Composable
-fun HiddenMeasure(
+internal fun HiddenMeasure(
     content: @Composable () -> Unit,
     onMeasured: (Placeable) -> Unit
 ) {

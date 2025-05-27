@@ -5,14 +5,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.media3.common.util.UnstableApi
 import net.newpipe.newplayer.uiModel.NewPlayerUIState
 
-data class ThumbnailGeometry(
+/** @hide */
+internal data class ThumbnailGeometry(
     val aspectRatio: Float, val edgeCorrectedPreviewPosition: Int
 )
 
+/** @hide */
 @OptIn(UnstableApi::class)
 @Composable
 internal fun calculateThumbnailPreviewGeometry(

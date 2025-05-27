@@ -40,6 +40,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -56,6 +57,8 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
@@ -67,12 +70,69 @@ import net.newpipe.newplayer.ui.seeker.SeekerDefaults
 import net.newpipe.newplayer.ui.theme.VideoPlayerTheme
 import net.newpipe.newplayer.uiModel.NewPlayerUIState
 
+/** @hide */
 internal const val PREVIEW_BOX_PADDING = 4
 
 /** @hide */
 @OptIn(UnstableApi::class)
 @Composable
 internal fun ThumbPreview(
+    modifier: Modifier = Modifier,
+    uiState: NewPlayerUIState,
+    thumbSize: Dp = SeekerDefaults.ThumbRadius * 2,
+    additionalStartPaddingPxls: Int = 0,
+    additionalEndPaddingPxls: Int = 0,
+    previewHeight: Dp = 60.dp,
+) {
+
+    Column(modifier = modifier) {
+        ThumbTextPreview(modifier = Modifier, uiState)
+
+        ThumbImagePreview(
+            modifier = Modifier,
+            uiState,
+            thumbSize,
+            additionalStartPaddingPxls,
+            additionalEndPaddingPxls,
+            previewHeight
+        )
+    }
+}
+
+@OptIn(UnstableApi::class)
+@Composable
+private fun ThumbTextPreview(
+    modifier: Modifier = Modifier,
+    uiState: NewPlayerUIState,
+) {
+
+    val textHeight = 30.dp
+
+    var sliderBoxWidth by remember {
+        mutableIntStateOf(-1)
+    }
+
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height((2 * PREVIEW_BOX_PADDING).dp + textHeight)
+            .onGloballyPositioned { rect ->
+                sliderBoxWidth = rect.size.width
+            }) {
+
+        Text(
+            text = uiState.currentSeekPreviewText ?: "",
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.bodyMedium,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 2,
+        )
+    }
+}
+
+@OptIn(UnstableApi::class)
+@Composable
+private fun ThumbImagePreview(
     modifier: Modifier = Modifier,
     uiState: NewPlayerUIState,
     thumbSize: Dp = SeekerDefaults.ThumbRadius * 2,
@@ -120,26 +180,11 @@ internal fun ThumbPreview(
                 if (uiState.currentSeekPreviewThumbnail != null) {
                     lastAvailableImage = uiState.currentSeekPreviewThumbnail
                 }
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                Box(
                     modifier = Modifier
                         .wrapContentSize()
                         .offset { IntOffset(thumbnailGeometry.edgeCorrectedPreviewPosition, 0) },
                 ) {
-                    /*
-                    uiState.currentSeekPreviewChapter?.chapterTitle?.let { chapterTitle ->
-                        Text(
-                            text = chapterTitle,
-                            textAlign = TextAlign.Center,
-                            style = MaterialTheme.typography.bodySmall,
-                            overflow = TextOverflow.Ellipsis,
-                            maxLines = 2,
-                            modifier = Modifier.width(previewHeight * aspectRatio)
-                        )
-                    }
-
-                     */
-
                     Card(
                         modifier = Modifier
                             .padding(PREVIEW_BOX_PADDING.dp)
@@ -172,7 +217,7 @@ internal fun ThumbPreview(
     }
 }
 
- @OptIn(UnstableApi::class)
+@OptIn(UnstableApi::class)
 @Preview(device = "spec:width=1080px,height=600px,dpi=440")
 @Composable
 private fun ThumbPreviewPreview() {
@@ -183,7 +228,7 @@ private fun ThumbPreviewPreview() {
 
     var thumbDown by remember { mutableStateOf(false) }
 
-    val previewThumbnail = null
+    val previewThumbnail =
         BitmapFactory.decodeResource(LocalContext.current.resources, R.mipmap.thumbnail_preview)
 
 
