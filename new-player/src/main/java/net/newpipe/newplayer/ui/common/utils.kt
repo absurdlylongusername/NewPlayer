@@ -34,6 +34,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.displayCutout
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.waterfall
@@ -42,10 +43,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.DpSize
 import androidx.core.os.ConfigurationCompat
 import androidx.core.view.WindowCompat
 import androidx.media3.common.MediaItem
@@ -266,4 +271,21 @@ internal fun relaunchCurrentActivity(activity: Activity) {
      */
     activity.startActivity(activity.intent)
 
+}
+
+@Composable
+fun HiddenMeasure(
+    content: @Composable () -> Unit,
+    onMeasured: (Placeable) -> Unit
+) {
+    Layout(
+        modifier = Modifier.size(DpSize.Zero),
+        content = content
+    ) { measurable, _ ->
+        val placeable = measurable.first().measure(Constraints())
+        onMeasured(placeable)
+        layout(0, 0) {
+            // Draw nothing
+        }
+    }
 }
