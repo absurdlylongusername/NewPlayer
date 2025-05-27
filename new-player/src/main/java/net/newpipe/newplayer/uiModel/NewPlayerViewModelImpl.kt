@@ -499,8 +499,7 @@ class NewPlayerViewModelImpl @Inject constructor(
         newPlayer?.currentPosition = seekPositionInMs
         Log.i(TAG, "Seek to Ms: $seekPositionInMs")
 
-        updateSeekPreviewThumbnail(seekPositionInMs)
-        updateSeekPreviewChapter(seekPositionInMs)
+        updateSeekPreview(seekPositionInMs)
         mutableUiState.update {
             it.copy(
                 seekerPosition = newValue,
@@ -510,22 +509,7 @@ class NewPlayerViewModelImpl @Inject constructor(
         }
     }
 
-    private fun updateSeekPreviewChapter(seekPositionInMs: Long) {
-        viewModelScope.launch {
-            val chapters = mutableUiState.value.chapters
-            val chapter = chapters.lastOrNull {
-                it.chapterStartInMs < seekPositionInMs
-            }
-            mutableUiState.update {
-                it.copy(
-                    currentSeekPreviewChapter = chapter,
-                    seekPreviewVisible = true
-                )
-            }
-        }
-    }
-
-    private fun updateSeekPreviewThumbnail(seekPositionInMs: Long) {
+    private fun updateSeekPreview(seekPositionInMs: Long) {
         updatePreviewThumbnailJob?.cancel()
 
         updatePreviewThumbnailJob = viewModelScope.launch {
@@ -533,12 +517,19 @@ class NewPlayerViewModelImpl @Inject constructor(
             val item = newPlayer?.currentlyPlaying?.value?.let {
                 newPlayer?.getItemFromMediaItem(it)
             }
+
+            val chapters = mutableUiState.value.chapters
+            val chapter = chapters.lastOrNull {
+                it.chapterStartInMs < seekPositionInMs
+            }
+
             item?.let {
                 val bitmap =
                     newPlayer?.repository?.getPreviewThumbnail(item, seekPositionInMs)
 
                 mutableUiState.update {
                     it.copy(
+                        currentSeekPreviewText = chapter?.chapterTitle,
                         currentSeekPreviewThumbnail = bitmap?.asImageBitmap(),
                         seekPreviewVisible = true
                     )

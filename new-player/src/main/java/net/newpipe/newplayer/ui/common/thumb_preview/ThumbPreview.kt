@@ -28,12 +28,27 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -93,9 +108,11 @@ internal fun ThumbPreview(
         ) {
             // Together with the getHeight() function this Box ensures that the thumbnail
             // does not collapse and glitch during enter and exit animation.
-            Box(Modifier
-                .fillMaxSize()
-                .background(Color.Red)) {
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .background(Color.Red)
+            ) {
                 // this allows the current thumbnail to remain when animated visibility is being hidden
                 var lastAvailableImage by remember {
                     mutableStateOf(uiState.currentSeekPreviewThumbnail)
@@ -181,7 +198,11 @@ private fun ThumbPreviewPreview() {
                     seekerPosition = sliderPosition,
                     seekPreviewVisible = thumbDown,
                     currentSeekPreviewThumbnail = previewThumbnail.asImageBitmap(),
-                    currentSeekPreviewChapter = Chapter(0, "What a wonderfull chapter", null)
+                    currentSeekPreviewText = Chapter(
+                        0,
+                        "What a wonderfull chapter",
+                        null
+                    ).chapterTitle
                 ),
                 additionalStartPaddingPxls = startOffset,
                 additionalEndPaddingPxls = endOffset,
