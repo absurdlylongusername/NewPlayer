@@ -73,6 +73,9 @@ import net.newpipe.newplayer.uiModel.NewPlayerUIState
 /** @hide */
 internal const val PREVIEW_BOX_PADDING = 4
 
+private val PREVIEW_FADE_IN = fadeIn(tween(200))
+private val PREVIEW_FADE_OUT = fadeOut(tween(400))
+
 /** @hide */
 @OptIn(UnstableApi::class)
 @Composable
@@ -120,13 +123,23 @@ private fun ThumbTextPreview(
                 sliderBoxWidth = rect.size.width
             }) {
 
-        Text(
-            text = uiState.currentSeekPreviewText ?: "",
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodyMedium,
-            overflow = TextOverflow.Ellipsis,
-            maxLines = 2,
-        )
+        AnimatedVisibility(
+            visible = uiState.seekPreviewVisible && (uiState.currentSeekPreviewText ?: "") != "",
+            enter = PREVIEW_FADE_IN,
+            exit = PREVIEW_FADE_OUT
+        ) {
+            Box(modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Yellow)) {
+                Text(
+                    text = uiState.currentSeekPreviewText ?: "",
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.bodyMedium,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 2,
+                )
+            }
+        }
     }
 }
 
@@ -163,8 +176,8 @@ private fun ThumbImagePreview(
             }) {
         AnimatedVisibility(
             visible = uiState.seekPreviewVisible && uiState.currentSeekPreviewThumbnail != null,
-            enter = fadeIn(animationSpec = tween(200)),
-            exit = fadeOut(animationSpec = tween(400)),
+            enter = PREVIEW_FADE_IN,
+            exit = PREVIEW_FADE_OUT
         ) {
             // Together with the getHeight() function this Box ensures that the thumbnail
             // does not collapse and glitch during enter and exit animation.
