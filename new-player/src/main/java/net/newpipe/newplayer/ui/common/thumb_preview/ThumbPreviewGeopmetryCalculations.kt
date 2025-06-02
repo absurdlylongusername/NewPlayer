@@ -36,7 +36,7 @@ internal fun PlaceRelativeToThumbSliderLayout(
 ) {
     val thumbSizePxls = with(LocalDensity.current) { thumbSize.toPx() }.toInt()
 
-    SubcomposeLayout { constraints ->
+    SubcomposeLayout(modifier) { constraints ->
         val placeables = subcompose(null, content).map {
             it.measure(Constraints())
         }

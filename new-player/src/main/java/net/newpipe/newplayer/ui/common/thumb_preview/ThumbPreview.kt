@@ -31,6 +31,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -173,6 +174,7 @@ private fun ThumbImagePreview(
             lastAvailableImage = uiState.currentSeekPreviewThumbnail
         }
 
+        lastAvailableImage?.let { lastAvailableImage ->
         PlaceRelativeToThumbSliderLayout(
             Modifier.wrapContentSize(),
             uiState = uiState,
@@ -187,13 +189,12 @@ private fun ThumbImagePreview(
                     modifier = Modifier
                         .padding(PREVIEW_BOX_PADDING.dp)
                         .height(previewHeight)
-                        .wrapContentWidth(),
+                        .aspectRatio(lastAvailableImage.width.toFloat() / lastAvailableImage.height.toFloat()),
                     elevation = CardDefaults.cardElevation(PREVIEW_BOX_PADDING.dp)
                 ) {
-                    lastAvailableImage?.let {
                         Image(
                             modifier = Modifier.fillMaxSize(),
-                            bitmap = it,
+                            bitmap = lastAvailableImage,
                             contentDescription = stringResource(id = R.string.seek_thumb_preview)
                         )
                     }
