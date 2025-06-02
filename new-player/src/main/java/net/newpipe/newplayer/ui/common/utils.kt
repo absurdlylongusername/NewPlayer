@@ -60,6 +60,7 @@ import java.util.Locale
  * @return the activity
  * @throws NullPointerException if there is no Activity
  */
+/** @hide */
 @Composable
 internal fun activity(): Activity
     = LocalContext.current.findActivity()!!
@@ -68,7 +69,8 @@ internal fun activity(): Activity
  *
  * @param default: the default value if there is no activity
  * @param block: the block to call with the activity
-  */
+ */
+/** @hide */
 @Composable
 internal fun <T>activity(default: T, block: @Composable Activity.() -> T): T =
     when (val a = LocalContext.current.findActivity()) {
@@ -76,7 +78,7 @@ internal fun <T>activity(default: T, block: @Composable Activity.() -> T): T =
         else -> block(a)
     }
 
-
+/** @hide */
 @Composable
 internal fun window(): Window
     = activity().window
@@ -88,9 +90,8 @@ internal fun Context.findActivity(): Activity? = when (this) {
     else -> null
 }
 
-@Composable
-
 /** @hide */
+@Composable
 internal fun LockScreenOrientation(orientation: Int) {
     val context = LocalContext.current
     LaunchedEffect(orientation) {
@@ -100,7 +101,6 @@ internal fun LockScreenOrientation(orientation: Int) {
 }
 
 @SuppressLint("NewApi")
-
 /** @return the default brightness of the screen, via window attributes */
 /** @hide */
 internal fun Activity.getDefaultBrightness(): Float {
@@ -109,7 +109,6 @@ internal fun Activity.getDefaultBrightness(): Float {
 }
 
 @SuppressLint("NewApi")
-
 /** @hide */
 internal fun setScreenBrightness(value: Float, activity: Activity) {
     val window = activity.window
@@ -123,7 +122,6 @@ internal fun setScreenBrightness(value: Float, activity: Activity) {
 
 @Composable
 @ReadOnlyComposable
-
 /** @hide */
 internal fun getLocale(): Locale? {
     val configuration = LocalConfiguration.current
@@ -157,7 +155,6 @@ internal fun Activity.getEmbeddedUiConfig(): EmbeddedUiConfig {
 }
 
 @Composable
-
 /** @hide */
 internal fun getInsets() =
     WindowInsets.systemBars.union(WindowInsets.displayCutout).union(WindowInsets.waterfall)
