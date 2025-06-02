@@ -38,6 +38,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -141,7 +142,7 @@ private fun ThumbTextPreview(
                     .background(Color.Yellow)
             ) {
 
-                PlaceCentralToThumb(
+                PlaceRelativeToThumbSliderLayout(
                     Modifier,
                     uiState,
                     thumbSize,
@@ -176,15 +177,6 @@ private fun ThumbImagePreview(
         mutableIntStateOf(-1)
     }
 
-    val thumbnailGeometry = calculateThumbnailPreviewGeometry(
-        uiState = uiState,
-        thumbSize = thumbSize,
-        previewHeight = previewHeight,
-        sliderBoxWidth = sliderBoxWidth,
-        additionalStartPaddingPxls = additionalStartPaddingPxls,
-        additionalEndPaddingPxls = additionalEndPaddingPxls
-    )
-
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -211,27 +203,36 @@ private fun ThumbImagePreview(
                 if (uiState.currentSeekPreviewThumbnail != null) {
                     lastAvailableImage = uiState.currentSeekPreviewThumbnail
                 }
-                Box(
-                    modifier = Modifier
-                        .wrapContentSize()
-                        .offset { IntOffset(thumbnailGeometry.edgeCorrectedPreviewPosition, 0) },
+
+                PlaceRelativeToThumbSliderLayout(
+                    Modifier,
+                    uiState = uiState,
+                    thumbSize = thumbSize,
+                    startOffset = additionalStartPaddingPxls,
+                    endOffset = additionalEndPaddingPxls
                 ) {
-                    Card(
+                    Box(
                         modifier = Modifier
-                            .padding(PREVIEW_BOX_PADDING.dp)
-                            .height((2 * PREVIEW_BOX_PADDING).dp + previewHeight)
-                            .aspectRatio(thumbnailGeometry.aspectRatio),
-                        elevation = CardDefaults.cardElevation(PREVIEW_BOX_PADDING.dp)
+                            .wrapContentSize()
                     ) {
-                        lastAvailableImage?.let {
-                            Image(
-                                modifier = Modifier.fillMaxSize(),
-                                bitmap = it,
-                                contentDescription = stringResource(id = R.string.seek_thumb_preview)
-                            )
+                        Card(
+                            modifier = Modifier
+                                .padding(PREVIEW_BOX_PADDING.dp)
+                                .height(previewHeight)
+                                .wrapContentWidth(),
+                            elevation = CardDefaults.cardElevation(PREVIEW_BOX_PADDING.dp)
+                        ) {
+                            lastAvailableImage?.let {
+                                Image(
+                                    modifier = Modifier.fillMaxSize(),
+                                    bitmap = it,
+                                    contentDescription = stringResource(id = R.string.seek_thumb_preview)
+                                )
+                            }
                         }
                     }
                 }
+
             }
         }
 
