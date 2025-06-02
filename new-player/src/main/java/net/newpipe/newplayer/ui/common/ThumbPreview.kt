@@ -165,8 +165,7 @@ internal fun ThumbPreview(
     }
 }
 
-
-@OptIn(UnstableApi::class)
+ @OptIn(UnstableApi::class)
 @Preview(device = "spec:width=1080px,height=600px,dpi=440")
 @Composable
 private fun ThumbPreviewPreview() {
@@ -177,8 +176,8 @@ private fun ThumbPreviewPreview() {
 
     var thumbDown by remember { mutableStateOf(false) }
 
-    val previewThumbnail =
-        BitmapFactory.decodeResource(LocalContext.current.resources, R.mipmap.thumbnail_preview)
+    val previewThumbnail = null
+//        BitmapFactory.decodeResource(LocalContext.current.resources, R.mipmap.thumbnail_preview)
 
 
     VideoPlayerTheme {
@@ -191,7 +190,7 @@ private fun ThumbPreviewPreview() {
                 uiState = NewPlayerUIState.DUMMY.copy(
                     seekerPosition = sliderPosition,
                     seekPreviewVisible = thumbDown,
-                    currentSeekPreviewThumbnail = previewThumbnail.asImageBitmap()
+                    currentSeekPreviewThumbnail = previewThumbnail?.asImageBitmap()
                 ), additionalStartPaddingPxls = startOffset, additionalEndPaddingPxls = endOffset,
                 thumbSize = 20.dp // see handle width
             )
