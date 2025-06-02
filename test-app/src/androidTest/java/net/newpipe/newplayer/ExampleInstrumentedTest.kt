@@ -39,6 +39,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("net.newpipe.newplayer", appContext.packageName)
+        assertEquals("net.newpipe.newplayer.testapp", appContext.packageName)
     }
 }

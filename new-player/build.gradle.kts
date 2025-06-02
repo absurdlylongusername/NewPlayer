@@ -24,6 +24,7 @@ android {
     }
 
     defaultConfig {
+        minSdk = 21
         aarMetadata {
             minCompileSdk = 21
         }
