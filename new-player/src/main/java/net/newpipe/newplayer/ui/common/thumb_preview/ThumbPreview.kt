@@ -31,11 +31,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -62,7 +60,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.media3.common.util.UnstableApi
 import net.newpipe.newplayer.R
@@ -92,8 +89,11 @@ internal fun ThumbPreview(
 
     Column(modifier = modifier) {
         ThumbTextPreview(
-            modifier = Modifier, uiState = uiState, thumbSize = thumbSize,
-            startOffset = additionalStartPaddingPxls, endOffset = additionalEndPaddingPxls
+            modifier = Modifier,
+            uiState = uiState,
+            thumbSize = thumbSize,
+            startOffset = additionalStartPaddingPxls,
+            endOffset = additionalEndPaddingPxls
         )
 
         ThumbImagePreview(
@@ -119,48 +119,29 @@ private fun ThumbTextPreview(
 
     val textHeight = 30.dp
 
-    var sliderBoxWidth by remember {
-        mutableIntStateOf(-1)
-    }
-
-    Box(
+    AnimatedVisibility(
         modifier = modifier
             .fillMaxWidth()
-            .height((2 * PREVIEW_BOX_PADDING).dp + textHeight)
-            .onGloballyPositioned { rect ->
-                sliderBoxWidth = rect.size.width
-            }) {
+            .height((2 * PREVIEW_BOX_PADDING).dp + textHeight),
+        visible = uiState.seekPreviewVisible && (uiState.currentSeekPreviewText ?: "") != "",
+        enter = PREVIEW_FADE_IN,
+        exit = PREVIEW_FADE_OUT
+    ) {
 
-        AnimatedVisibility(
-            visible = uiState.seekPreviewVisible && (uiState.currentSeekPreviewText ?: "") != "",
-            enter = PREVIEW_FADE_IN,
-            exit = PREVIEW_FADE_OUT
+        PlaceRelativeToThumbSliderLayout(
+            Modifier, uiState, thumbSize, startOffset = startOffset, endOffset = endOffset
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Yellow)
-            ) {
-
-                PlaceRelativeToThumbSliderLayout(
-                    Modifier,
-                    uiState,
-                    thumbSize,
-                    startOffset = startOffset,
-                    endOffset = endOffset
-                ) {
-                    Text(
-                        text = uiState.currentSeekPreviewText ?: "",
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.bodyMedium,
-                        overflow = TextOverflow.Ellipsis,
-                        maxLines = 2,
-                    )
-                }
-            }
+            Text(
+                text = uiState.currentSeekPreviewText ?: "",
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.bodyMedium,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 2,
+            )
         }
     }
 }
+
 
 @OptIn(UnstableApi::class)
 @Composable
@@ -173,69 +154,52 @@ private fun ThumbImagePreview(
     previewHeight: Dp = 60.dp,
 ) {
 
-    var sliderBoxWidth by remember {
-        mutableIntStateOf(-1)
-    }
-
-    Box(
-        modifier = modifier
+    AnimatedVisibility(
+        modifier = Modifier
             .fillMaxWidth()
-            .height((2 * PREVIEW_BOX_PADDING).dp + previewHeight)
-            .onGloballyPositioned { rect ->
-                sliderBoxWidth = rect.size.width
-            }) {
-        AnimatedVisibility(
-            visible = uiState.seekPreviewVisible && uiState.currentSeekPreviewThumbnail != null,
-            enter = PREVIEW_FADE_IN,
-            exit = PREVIEW_FADE_OUT
-        ) {
-            // Together with the getHeight() function this Box ensures that the thumbnail
-            // does not collapse and glitch during enter and exit animation.
-            Box(
-                Modifier
-                    .fillMaxSize()
-                    .background(Color.Red)
-            ) {
-                // this allows the current thumbnail to remain when animated visibility is being hidden
-                var lastAvailableImage by remember {
-                    mutableStateOf(uiState.currentSeekPreviewThumbnail)
-                }
-                if (uiState.currentSeekPreviewThumbnail != null) {
-                    lastAvailableImage = uiState.currentSeekPreviewThumbnail
-                }
+            .height(previewHeight + PREVIEW_BOX_PADDING.dp * 2),
+        visible = uiState.seekPreviewVisible && uiState.currentSeekPreviewThumbnail != null,
+        enter = PREVIEW_FADE_IN,
+        exit = PREVIEW_FADE_OUT
+    ) {
+        // Together with the getHeight() function this Box ensures that the thumbnail
+        // does not collapse and glitch during enter and exit animation.
 
-                PlaceRelativeToThumbSliderLayout(
-                    Modifier,
-                    uiState = uiState,
-                    thumbSize = thumbSize,
-                    startOffset = additionalStartPaddingPxls,
-                    endOffset = additionalEndPaddingPxls
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .wrapContentSize()
-                    ) {
-                        Card(
-                            modifier = Modifier
-                                .padding(PREVIEW_BOX_PADDING.dp)
-                                .height(previewHeight)
-                                .wrapContentWidth(),
-                            elevation = CardDefaults.cardElevation(PREVIEW_BOX_PADDING.dp)
-                        ) {
-                            lastAvailableImage?.let {
-                                Image(
-                                    modifier = Modifier.fillMaxSize(),
-                                    bitmap = it,
-                                    contentDescription = stringResource(id = R.string.seek_thumb_preview)
-                                )
-                            }
-                        }
-                    }
-                }
-
-            }
+        // this allows the current thumbnail to remain when animated visibility is being hidden
+        var lastAvailableImage by remember {
+            mutableStateOf(uiState.currentSeekPreviewThumbnail)
+        }
+        if (uiState.currentSeekPreviewThumbnail != null) {
+            lastAvailableImage = uiState.currentSeekPreviewThumbnail
         }
 
+        PlaceRelativeToThumbSliderLayout(
+            Modifier.wrapContentSize(),
+            uiState = uiState,
+            thumbSize = thumbSize,
+            startOffset = additionalStartPaddingPxls,
+            endOffset = additionalEndPaddingPxls
+        ) {
+            Box(
+                modifier = Modifier.wrapContentSize()
+            ) {
+                Card(
+                    modifier = Modifier
+                        .padding(PREVIEW_BOX_PADDING.dp)
+                        .height(previewHeight)
+                        .wrapContentWidth(),
+                    elevation = CardDefaults.cardElevation(PREVIEW_BOX_PADDING.dp)
+                ) {
+                    lastAvailableImage?.let {
+                        Image(
+                            modifier = Modifier.fillMaxSize(),
+                            bitmap = it,
+                            contentDescription = stringResource(id = R.string.seek_thumb_preview)
+                        )
+                    }
+                }
+            }
+        }
 
         /* This is a little helper block that helps place the thumbnail correctly relative to the
         thumb of the seeker. This is only there for debug reasons.
@@ -276,9 +240,7 @@ private fun ThumbPreviewPreview() {
                     seekPreviewVisible = thumbDown,
                     currentSeekPreviewThumbnail = previewThumbnail.asImageBitmap(),
                     currentSeekPreviewText = Chapter(
-                        0,
-                        "What a wonderfull chapter",
-                        null
+                        0, "What a wonderfull chapter", null
                     ).chapterTitle
                 ),
                 additionalStartPaddingPxls = startOffset,
