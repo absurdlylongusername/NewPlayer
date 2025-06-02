@@ -120,7 +120,7 @@ internal fun AudioBottomUI(viewModel: InternalNewPlayerViewModel, uiState: NewPl
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.List,
                         contentDescription = stringResource(
-                            id = R.string.widget_descriptoin_playlist_item_selection
+                            id = R.string.widget_description_playlist_item_selection
                         )
                     )
                 }

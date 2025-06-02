@@ -105,7 +105,7 @@ internal fun LockScreenOrientation(orientation: Int) {
 /** @hide */
 internal fun Activity.getDefaultBrightness(): Float {
     val layout = window.attributes as WindowManager.LayoutParams
-    return if (layout.screenBrightness < 0) 0.5f else layout.screenBrightness
+    return if (layout.screenBrightness < 0) -1f else layout.screenBrightness
 }
 
 @SuppressLint("NewApi")

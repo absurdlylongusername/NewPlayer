@@ -37,20 +37,15 @@ import androidx.media3.common.util.UnstableApi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import javax.inject.Inject
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import net.newpipe.newplayer.data.VideoSize
 import net.newpipe.newplayer.NewPlayer
 import net.newpipe.newplayer.data.NewPlayerException
 import net.newpipe.newplayer.data.PlayMode
 import net.newpipe.newplayer.data.RepeatMode
+import net.newpipe.newplayer.data.VideoSize
 import net.newpipe.newplayer.ui.ContentScale
+import javax.inject.Inject
 import kotlin.math.abs
 
 val VIDEOPLAYER_UI_STATE = "video_player_ui_state"
@@ -482,12 +477,28 @@ class NewPlayerViewModelImpl @Inject constructor(
         Log.i(TAG, "Seek to Ms: $seekPositionInMs")
 
         updateSeekPreviewThumbnail(seekPositionInMs)
+        updateSeekPreviewChapter(seekPositionInMs)
         mutableUiState.update {
             it.copy(
                 seekerPosition = newValue,
                 playbackPositionInMs = getSeekerPositionInMs(it),
                 seekPreviewVisible = true
             )
+        }
+    }
+
+    private fun updateSeekPreviewChapter(seekPositionInMs: Long) {
+        viewModelScope.launch {
+            val chapters = mutableUiState.value.chapters
+            val chapter = chapters.lastOrNull {
+                it.chapterStartInMs < seekPositionInMs
+            }
+            mutableUiState.update {
+                it.copy(
+                    currentSeekPreviewChapter = chapter,
+                    seekPreviewVisible = true
+                )
+            }
         }
     }
 
@@ -514,9 +525,8 @@ class NewPlayerViewModelImpl @Inject constructor(
     }
 
     override fun seekingFinished() {
-        val seekerPosition = mutableUiState.value.seekerPosition
-        val seekPositionInMs = (newPlayer?.duration?.toFloat() ?: 0F) * seekerPosition
-        newPlayer?.currentPosition = seekPositionInMs.toLong()
+        newPlayer?.currentPosition = getSeekerPositionInMs(mutableUiState.value)
+
         mutableUiState.update {
             it.copy(seekPreviewVisible = false)
         }

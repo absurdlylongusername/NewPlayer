@@ -43,28 +43,28 @@ internal fun FadedAnimationForSeekFeedback(
         mutableStateOf(0)
     }
 
-    val vissible = if (backwards) {
+    val visible = if (backwards) {
         fastSeekSeconds < 0
     } else {
         0 < fastSeekSeconds
     }
 
-    val disapearEmediatly = if (backwards) {
+    val disappearImmediately = if (backwards) {
         0 < fastSeekSeconds
     } else {
         fastSeekSeconds < 0
     }
 
-    val valueToDisplay = if(vissible) {
+    val valueToDisplay = if(visible) {
         lastSecondsValue = fastSeekSeconds
         fastSeekSeconds
     } else {
         lastSecondsValue
     }
 
-    if (!disapearEmediatly) {
+    if (!disappearImmediately) {
         AnimatedVisibility(
-            visible = vissible,
+            visible = visible,
             enter = fadeIn(animationSpec = tween(SEEK_ANIMATION_FADE_IN)),
             exit = fadeOut(
                 animationSpec = tween(SEEK_ANIMATION_FADE_OUT)

@@ -146,7 +146,7 @@ Main menu
    You can do this by implementing your own [`MediaRepository`](https://teamnewpipe.github.io/NewPlayer/new-player/net.newpipe.newplayer.repository/-media-repository/index.html). More information can be found about thins in the [`MediaRepository code documentation`](https://teamnewpipe.github.io/NewPlayer/new-player/net.newpipe.newplayer.repository/-media-repository/index.html). There is also an [example implementation](https://github.com/TeamNewPipe/NewPlayer/blob/dev/test-app/src/main/java/net/newpipe/newplayer/testapp/TestMediaRepository.kt) of it in the test-app.
 
 7. **Do advanced things**
-   Like applying caching and prefetching to your media repository using the meta `MediaRepository` implementations, or perform error handling and error recovering. *TOOD: Write the documentation for this*
+   Like applying caching and prefetching to your media repository using the meta `MediaRepository` implementations, or perform error handling and error recovering. *TODO: Write the documentation for this*
 
 
 ## How does NewPlayer work

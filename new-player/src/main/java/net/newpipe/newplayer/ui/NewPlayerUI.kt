@@ -150,7 +150,7 @@ fun NewPlayerUI(
             Log.d(TAG, "New Brightness: ${uiState.brightness}")
 
             setScreenBrightness(
-                uiState.brightness ?: defaultBrightness, activity
+                if (uiState.brightness < 0) defaultBrightness else uiState.brightness, activity
             )
         }
 
@@ -190,7 +190,7 @@ fun NewPlayerUI(
 @OptIn(UnstableApi::class)
 @Preview(device = "spec:width=1080px,height=700px,dpi=440,orientation=landscape")
 @Composable
-private fun PlayerUIPreviewEmbeded() {
+private fun PlayerUIPreviewEmbedded() {
     VideoPlayerTheme {
         NewPlayerUI(viewModel = NewPlayerViewModelDummy())
     }
