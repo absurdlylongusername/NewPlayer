@@ -76,6 +76,7 @@ internal const val PREVIEW_BOX_PADDING = 4
 private val PREVIEW_FADE_IN = fadeIn(tween(200))
 private val PREVIEW_FADE_OUT = fadeOut(tween(400))
 
+
 /** @hide */
 @OptIn(UnstableApi::class)
 @Composable
@@ -89,7 +90,10 @@ internal fun ThumbPreview(
 ) {
 
     Column(modifier = modifier) {
-        ThumbTextPreview(modifier = Modifier, uiState)
+        ThumbTextPreview(
+            modifier = Modifier, uiState = uiState, thumbSize = thumbSize,
+            startOffset = additionalStartPaddingPxls, endOffset = additionalEndPaddingPxls
+        )
 
         ThumbImagePreview(
             modifier = Modifier,
@@ -107,6 +111,9 @@ internal fun ThumbPreview(
 private fun ThumbTextPreview(
     modifier: Modifier = Modifier,
     uiState: NewPlayerUIState,
+    thumbSize: Dp,
+    startOffset: Int,
+    endOffset: Int
 ) {
 
     val textHeight = 30.dp
@@ -128,16 +135,27 @@ private fun ThumbTextPreview(
             enter = PREVIEW_FADE_IN,
             exit = PREVIEW_FADE_OUT
         ) {
-            Box(modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Yellow)) {
-                Text(
-                    text = uiState.currentSeekPreviewText ?: "",
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.bodyMedium,
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 2,
-                )
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Yellow)
+            ) {
+
+                PlaceCentralToThumb(
+                    Modifier,
+                    uiState,
+                    thumbSize,
+                    startOffset = startOffset,
+                    endOffset = endOffset
+                ) {
+                    Text(
+                        text = uiState.currentSeekPreviewText ?: "",
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.bodyMedium,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 2,
+                    )
+                }
             }
         }
     }
