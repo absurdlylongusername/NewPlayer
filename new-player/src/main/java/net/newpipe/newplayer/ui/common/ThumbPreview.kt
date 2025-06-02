@@ -57,10 +57,9 @@ import net.newpipe.newplayer.uiModel.NewPlayerUIState
 
 private const val BOX_PADDING = 4
 
+/** @hide */
 @OptIn(UnstableApi::class)
 @Composable
-
-/** @hide */
 internal fun ThumbPreview(
     modifier: Modifier = Modifier,
     uiState: NewPlayerUIState,
