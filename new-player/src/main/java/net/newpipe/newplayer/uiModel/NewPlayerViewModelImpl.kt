@@ -133,6 +133,14 @@ class NewPlayerViewModelImpl @Inject constructor(
             }
         }
 
+    override var showPlaylistInAudioPlayer: Boolean
+        get() = mutableUiState.value.showPlaylistInAudioPlayer
+        set(value) {
+            mutableUiState.update {
+                it.copy(showPlaylistInAudioPlayer = value)
+            }
+        }
+
     private var mutableEmbeddedPlayerDraggedDownBy = MutableSharedFlow<Float>()
     override val embeddedPlayerDraggedDownBy = mutableEmbeddedPlayerDraggedDownBy.asSharedFlow()
 
@@ -329,12 +337,18 @@ class NewPlayerViewModelImpl @Inject constructor(
         }
     }
 
+    private fun requiresPlaylistProgressUpdate(uiModeState: UIModeState) =
+        uiModeState.isStreamSelect
+                || (uiModeState.inAudioMode && uiState.value.showPlaylistInAudioPlayer)
+
     override fun changeUiMode(newUiModeState: UIModeState, embeddedUiConfig: EmbeddedUiConfig?) {
         if (newUiModeState == uiState.value.uiMode) {
             return;
         }
 
-        if (!uiState.value.uiMode.fullscreen && newUiModeState.fullscreen && embeddedUiConfig != null) {
+        if (!uiState.value.uiMode.fullscreen
+            && newUiModeState.fullscreen && embeddedUiConfig != null
+        ) {
             this.embeddedUiConfig = embeddedUiConfig
         }
 
@@ -347,7 +361,7 @@ class NewPlayerViewModelImpl @Inject constructor(
             hideUiDelayedJob?.cancel()
         }
 
-        if (newUiModeState.isStreamSelect) {
+        if (requiresPlaylistProgressUpdate(newUiModeState)) {
             startPlaylistProgressUpdaterJob()
         } else {
             playlistProgressUpdaterJob?.cancel()
@@ -395,12 +409,21 @@ class NewPlayerViewModelImpl @Inject constructor(
 
     override fun resetHideDelayTimer() {
         hideUiDelayedJob?.cancel()
-        if(!dialogIsVisible) {
+        if (!dialogIsVisible) {
             hideUiDelayedJob = viewModelScope.launch {
                 delay(2000)
-                if(!dialogIsVisible)
+                if (!dialogIsVisible)
                     changeUiMode(uiState.value.uiMode.getUiHiddenState(), null)
             }
+        }
+    }
+
+    override fun onShowPlaylistInAudioPlayerToggle() {
+        showPlaylistInAudioPlayer = !showPlaylistInAudioPlayer
+        if (requiresPlaylistProgressUpdate(uiState.value.uiMode)) {
+            startPlaylistProgressUpdaterJob()
+        } else {
+            playlistProgressUpdaterJob?.cancel()
         }
     }
 
@@ -640,7 +663,7 @@ class NewPlayerViewModelImpl @Inject constructor(
     override fun cycleContentFitMode() {
         mutableUiState.update {
             it.copy(
-                contentFitMode = when(it.contentFitMode) {
+                contentFitMode = when (it.contentFitMode) {
                     ContentScale.STRETCHED -> ContentScale.FIT_INSIDE
                     ContentScale.FIT_INSIDE -> ContentScale.CROP
                     ContentScale.CROP -> ContentScale.STRETCHED

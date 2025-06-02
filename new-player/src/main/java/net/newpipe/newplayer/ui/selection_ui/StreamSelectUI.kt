@@ -54,10 +54,10 @@ import sh.calvin.reorderable.rememberReorderableLazyListState
 /** @hide */
 internal val ITEM_CORNER_SHAPE = RoundedCornerShape(10.dp)
 
-@OptIn(UnstableApi::class)
-@Composable
 
 /** @hide */
+@OptIn(UnstableApi::class)
+@Composable
 internal fun StreamSelectUI(
     viewModel: InternalNewPlayerViewModel,
     uiState: NewPlayerUIState,
@@ -79,7 +79,9 @@ internal fun StreamSelectUI(
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             ReorderableStreamItemsList(
-                padding = PaddingValues(start = 5.dp, end = 5.dp),
+                modifier = Modifier
+                    .padding(PaddingValues(start = 5.dp, end = 5.dp))
+                    .fillMaxSize(),
                 viewModel = viewModel,
                 uiState = uiState
             )
@@ -87,10 +89,11 @@ internal fun StreamSelectUI(
     }
 }
 
+/**hide*/
 @OptIn(UnstableApi::class)
 @Composable
-private fun ReorderableStreamItemsList(
-    padding: PaddingValues,
+internal fun ReorderableStreamItemsList(
+    modifier: Modifier,
     viewModel: InternalNewPlayerViewModel,
     uiState: NewPlayerUIState
 ) {
@@ -104,9 +107,7 @@ private fun ReorderableStreamItemsList(
         }
 
     LazyColumn(
-        modifier = Modifier
-            .padding(padding)
-            .fillMaxSize(),
+        modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(5.dp),
         state = lazyListState
     ) {
@@ -139,7 +140,7 @@ private fun ReorderableStreamItemsList(
 @Composable
 private fun VideoPlayerStreamSelectUIPreview() {
     VideoPlayerTheme {
-        Surface(modifier = Modifier.fillMaxSize(), color = Color.Red) {
+        Surface(modifier = Modifier.fillMaxSize(), color = Color.DarkGray) {
             StreamSelectUI(
                 viewModel = NewPlayerViewModelDummy(),
                 uiState = NewPlayerUIState.DUMMY,

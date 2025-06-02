@@ -52,15 +52,15 @@ import net.newpipe.newplayer.ui.common.getPlaylistDurationInMS
 import net.newpipe.newplayer.ui.common.getTimeStringFromMs
 import net.newpipe.newplayer.ui.common.showNotYetImplementedToast
 
+/** @hide */
 @androidx.annotation.OptIn(UnstableApi::class)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-
-/** @hide */
 internal fun StreamSelectTopBar(
     modifier: Modifier = Modifier,
     viewModel: InternalNewPlayerViewModel,
-    uiState: NewPlayerUIState
+    uiState: NewPlayerUIState,
+    isUsedInAudiPlayer: Boolean = false
 ) {
 
     val embeddedUiConfig = getEmbeddedUiConfig()
@@ -98,18 +98,20 @@ internal fun StreamSelectTopBar(
                 )
             }
 
-            IconButton(
-                onClick = {
-                    viewModel.changeUiMode(
-                        uiState.uiMode.getNextModeWhenBackPressed() ?: uiState.uiMode,
-                        embeddedUiConfig
+            if (!isUsedInAudiPlayer) {
+                IconButton(
+                    onClick = {
+                        viewModel.changeUiMode(
+                            uiState.uiMode.getNextModeWhenBackPressed() ?: uiState.uiMode,
+                            embeddedUiConfig
+                        )
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Close,
+                        contentDescription = stringResource(R.string.close_stream_selection)
                     )
                 }
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Close,
-                    contentDescription = stringResource(R.string.close_stream_selection)
-                )
             }
         })
 }

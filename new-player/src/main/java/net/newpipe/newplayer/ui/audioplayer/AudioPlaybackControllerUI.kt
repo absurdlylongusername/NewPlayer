@@ -58,7 +58,7 @@ import net.newpipe.newplayer.ui.theme.VideoPlayerTheme
 @Composable
 
 /** @hide */
-internal fun AudioPlaybackController(
+internal fun AudioPlaybackControllerUI(
     modifier: Modifier = Modifier,
     viewModel: InternalNewPlayerViewModel,
     uiState: NewPlayerUIState
@@ -201,7 +201,7 @@ internal fun AudioPlaybackController(
 @Composable
 private fun AudioPlayerControllerPreview() {
     VideoPlayerTheme {
-        AudioPlaybackController(
+        AudioPlaybackControllerUI(
             viewModel = NewPlayerViewModelDummy(),
             uiState = NewPlayerUIState.DUMMY.copy(playList = emptyList(), isLoading = false)
         )

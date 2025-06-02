@@ -40,10 +40,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import net.newpipe.newplayer.R
 import net.newpipe.newplayer.ui.theme.VideoPlayerTheme
 
+/** @hide */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-
-/** @hide */
 internal fun ChapterSelectTopBar(modifier: Modifier = Modifier, onClose: () -> Unit) {
     TopAppBar(modifier = modifier,
         colors = topAppBarColors(containerColor = Color.Transparent),

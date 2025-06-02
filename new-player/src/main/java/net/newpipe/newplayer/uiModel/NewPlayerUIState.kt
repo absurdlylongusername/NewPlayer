@@ -194,6 +194,9 @@ data class NewPlayerUIState(
      * Depicts weather the seeker preview thumbnail should be visible or not.
      */
     val seekPreviewVisible: Boolean,
+
+    /** Depicts weather to show the playlist or the current stream thumbnail in the audio player.**/
+    var showPlaylistInAudioPlayer: Boolean,
 ) {
     companion object {
 
@@ -229,6 +232,7 @@ data class NewPlayerUIState(
             currentSeekPreviewThumbnail = null,
             currentSeekPreviewChapter = null,
             seekPreviewVisible = false,
+            showPlaylistInAudioPlayer = false
         )
 
         /**

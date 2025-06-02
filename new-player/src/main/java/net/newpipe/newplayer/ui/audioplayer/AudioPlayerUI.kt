@@ -26,11 +26,16 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -51,6 +56,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -64,6 +70,8 @@ import net.newpipe.newplayer.ui.common.getLocale
 import net.newpipe.newplayer.ui.common.getTimeStringFromMs
 import net.newpipe.newplayer.ui.seeker.SeekerDefaults
 import net.newpipe.newplayer.ui.selection_ui.ChapterSelectUI
+import net.newpipe.newplayer.ui.selection_ui.ReorderableStreamItemsList
+import net.newpipe.newplayer.ui.selection_ui.StreamSelectTopBar
 import net.newpipe.newplayer.ui.selection_ui.StreamSelectUI
 import net.newpipe.newplayer.ui.theme.VideoPlayerTheme
 import net.newpipe.newplayer.uiModel.InternalNewPlayerViewModel
@@ -75,19 +83,25 @@ import net.newpipe.newplayer.uiModel.UIModeState
 private val UI_ENTER_ANIMATION = fadeIn(tween(200))
 private val UI_EXIT_ANIMATION = fadeOut(tween(200))
 
+/**hide*/
 @Composable
-
-/** @hide */
 internal fun lightAudioControlButtonColorScheme() = ButtonDefaults.buttonColors().copy(
     containerColor = MaterialTheme.colorScheme.background,
     contentColor = MaterialTheme.colorScheme.onSurface,
     disabledContainerColor = MaterialTheme.colorScheme.background
 )
 
-@OptIn(UnstableApi::class)
+/**hide*/
 @Composable
+internal fun highlightedLightAudioControlButtonColorScheme() = ButtonDefaults.buttonColors().copy(
+    containerColor = MaterialTheme.colorScheme.outlineVariant,
+    contentColor = MaterialTheme.colorScheme.onSurface,
+    disabledContainerColor = MaterialTheme.colorScheme.background
+)
 
 /** @hide */
+@OptIn(UnstableApi::class)
+@Composable
 internal fun AudioPlayerUI(
     viewModel: InternalNewPlayerViewModel,
     uiState: NewPlayerUIState,
@@ -138,167 +152,20 @@ internal fun AudioPlayerUI(
                     LandscapeLayout(
                         viewModel = viewModel,
                         uiState = uiState,
-                        modifier = Modifier.padding(innerPadding).padding(16.dp),
+                        modifier = Modifier
+                            .padding(innerPadding)
+                            .padding(16.dp),
                     )
                 } else {
                     PortraitLayout(
                         viewModel = viewModel,
                         uiState = uiState,
-                        modifier = Modifier.padding(innerPadding).padding(16.dp),
+                        modifier = Modifier
+                            .padding(innerPadding)
+                            .padding(16.dp),
                     )
                 }
             }
-        }
-    }
-}
-
-@OptIn(UnstableApi::class)
-@Composable
-private fun LandscapeLayout(
-    viewModel: InternalNewPlayerViewModel,
-    uiState: NewPlayerUIState,
-    modifier: Modifier = Modifier,
-) {
-    Column (modifier = modifier) {
-        TitleView(
-            modifier = Modifier
-                .fillMaxWidth(),
-            uiState = uiState,
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(32.dp),
-        ) {
-            CoverArt(
-                uiState = uiState,
-                modifier = Modifier.weight(1f)
-            )
-
-            Column(
-                verticalArrangement = Arrangement.SpaceEvenly,
-                modifier = Modifier.fillMaxHeight().weight(1f)
-            ) {
-                AudioPlaybackController(viewModel = viewModel, uiState = uiState)
-                ProgressUI(viewModel = viewModel, uiState = uiState)
-                AudioBottomUI(viewModel = viewModel, uiState = uiState)
-            }
-        }
-    }
-}
-
-@OptIn(UnstableApi::class)
-@Composable
-private fun PortraitLayout(
-    viewModel: InternalNewPlayerViewModel,
-    uiState: NewPlayerUIState,
-    modifier: Modifier = Modifier,
-) {
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(32.dp),
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxHeight()
-                .weight(1f),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-        ) {
-            CoverArt(uiState = uiState)
-            Spacer(modifier = Modifier.height(24.dp))
-            TitleView(uiState = uiState)
-        }
-        AudioPlaybackController(viewModel = viewModel, uiState = uiState)
-        ProgressUI(viewModel = viewModel, uiState = uiState)
-        AudioBottomUI(viewModel, uiState)
-    }
-}
-
-@OptIn(UnstableApi::class)
-@Composable
-private fun ProgressUI(
-    modifier: Modifier = Modifier,
-    viewModel: InternalNewPlayerViewModel,
-    uiState: NewPlayerUIState
-) {
-    val locale = getLocale()!!
-
-    Column(modifier = modifier) {
-        Box(
-            modifier = Modifier
-                .height(0.dp)
-                .fillMaxWidth()
-                .wrapContentHeight(unbounded = true, align = Alignment.Bottom)
-        ) {
-            ThumbPreview(
-                modifier = Modifier.offset(y = (-20).dp) /* We have this offset to make space for your thumb */,
-                uiState = uiState,
-                thumbSize = SeekerDefaults.ThumbRadius * 2,
-                previewHeight = 120.dp
-            )
-        }
-
-        NewPlayerSeeker(viewModel = viewModel, uiState = uiState)
-        Row {
-            Text(
-                getTimeStringFromMs(
-                    uiState.playbackPositionInMs,
-                    getLocale() ?: locale
-                )
-            )
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-            )
-            Text(
-                getTimeStringFromMs(
-                    uiState.durationInMs,
-                    getLocale() ?: locale
-                )
-            )
-        }
-    }
-}
-
-@OptIn(UnstableApi::class)
-@Composable
-private fun TitleView(modifier: Modifier = Modifier, uiState: NewPlayerUIState) {
-    Column(modifier = modifier) {
-        Text(
-            text = uiState.currentlyPlaying?.mediaMetadata?.title.toString(),
-            maxLines = 1,
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.basicMarquee(),
-        )
-        Spacer(modifier = Modifier.height(6.dp))
-        Text(
-            text = uiState.currentlyPlaying?.mediaMetadata?.artist.toString(),
-            maxLines = 1,
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.basicMarquee(),
-        )
-    }
-}
-
-@OptIn(UnstableApi::class)
-@Composable
-private fun CoverArt(modifier: Modifier = Modifier, uiState: NewPlayerUIState) {
-    Box(modifier = modifier) {
-        Card(
-            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-        ) {
-            Thumbnail(
-                modifier = Modifier.fillMaxWidth(),
-                thumbnail = uiState.currentlyPlaying?.mediaMetadata?.artworkUri,
-                contentDescription = stringResource(
-                    id = R.string.stream_thumbnail
-                ),
-            )
         }
     }
 }
@@ -310,7 +177,25 @@ private fun AudioPlayerUIPortraitPreview() {
     VideoPlayerTheme {
         AudioPlayerUI(
             viewModel = NewPlayerViewModelDummy(),
-            uiState = NewPlayerUIState.DUMMY.copy(uiMode = UIModeState.FULLSCREEN_AUDIO),
+            uiState = NewPlayerUIState.DUMMY.copy(
+                uiMode = UIModeState.FULLSCREEN_AUDIO
+            ),
+            isLandScape = false
+        )
+    }
+}
+
+@OptIn(UnstableApi::class)
+@Preview(device = "id:pixel_6", showSystemUi = true)
+@Composable
+private fun AudioPlayerUIPortraitPreviewWithPlaylist() {
+    VideoPlayerTheme {
+        AudioPlayerUI(
+            viewModel = NewPlayerViewModelDummy(),
+            uiState = NewPlayerUIState.DUMMY.copy(
+                uiMode = UIModeState.FULLSCREEN_AUDIO,
+                showPlaylistInAudioPlayer = true
+            ),
             isLandScape = false
         )
     }
@@ -324,6 +209,22 @@ private fun AudioPlayerUILandscapePreview() {
         AudioPlayerUI(
             viewModel = NewPlayerViewModelDummy(),
             uiState = NewPlayerUIState.DUMMY.copy(uiMode = UIModeState.FULLSCREEN_AUDIO),
+            isLandScape = true
+        )
+    }
+}
+
+@OptIn(UnstableApi::class)
+@Preview(device = "spec:parent=pixel_6,orientation=landscape", showSystemUi = true)
+@Composable
+private fun AudioPlayerUILandscapePreviewWithPlaylist() {
+    VideoPlayerTheme {
+        AudioPlayerUI(
+            viewModel = NewPlayerViewModelDummy(),
+            uiState = NewPlayerUIState.DUMMY.copy(
+                uiMode = UIModeState.FULLSCREEN_AUDIO,
+                showPlaylistInAudioPlayer = true
+            ),
             isLandScape = true
         )
     }

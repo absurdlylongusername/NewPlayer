@@ -58,4 +58,5 @@ internal interface InternalNewPlayerViewModel : NewPlayerViewModel {
     fun dialogVisible(visible: Boolean)
     fun doneEnteringPip()
     fun resetHideDelayTimer()
+    fun onShowPlaylistInAudioPlayerToggle()
 }
