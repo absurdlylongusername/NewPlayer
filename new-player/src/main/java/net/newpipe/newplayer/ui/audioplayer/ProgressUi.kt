@@ -16,7 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.media3.common.util.UnstableApi
 import net.newpipe.newplayer.ui.common.NewPlayerSeeker
-import net.newpipe.newplayer.ui.common.ThumbPreview
+import net.newpipe.newplayer.ui.common.thumb_preview.ThumbPreview
 import net.newpipe.newplayer.ui.common.getLocale
 import net.newpipe.newplayer.ui.common.getTimeStringFromMs
 import net.newpipe.newplayer.ui.seeker.SeekerDefaults

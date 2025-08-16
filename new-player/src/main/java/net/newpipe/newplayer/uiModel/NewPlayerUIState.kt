@@ -185,10 +185,10 @@ data class NewPlayerUIState(
     val currentSeekPreviewThumbnail: ImageBitmap?,
 
     /**
-     * The seeker preview chapter that should be visible. This updates if the user uses
-     * the seeker thumb to seek through a stream. If null no chapter is available.
+     * The seeker preview text that should be visible when the playback position is changed through
+     * the seek bar. If null no text will be rendered.
      */
-    val currentSeekPreviewChapter: Chapter?,
+    val currentSeekPreviewText: String?,
 
     /**
      * Depicts weather the seeker preview thumbnail should be visible or not.
@@ -230,7 +230,7 @@ data class NewPlayerUIState(
             currentlyPlayingTracks = emptyList(),
             enteringPip = false,
             currentSeekPreviewThumbnail = null,
-            currentSeekPreviewChapter = null,
+            currentSeekPreviewText = null,
             seekPreviewVisible = false,
             showPlaylistInAudioPlayer = false
         )

@@ -63,7 +63,7 @@ import androidx.compose.ui.unit.dp
 import androidx.media3.common.util.UnstableApi
 import net.newpipe.newplayer.R
 import net.newpipe.newplayer.ui.common.NewPlayerSeeker
-import net.newpipe.newplayer.ui.common.ThumbPreview
+import net.newpipe.newplayer.ui.common.thumb_preview.ThumbPreview
 import net.newpipe.newplayer.ui.common.Thumbnail
 import net.newpipe.newplayer.ui.common.getInsets
 import net.newpipe.newplayer.ui.common.getLocale
