@@ -36,8 +36,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -71,6 +71,7 @@ import net.newpipe.newplayer.uiModel.NewPlayerUIState
 
 /** @hide */
 internal const val PREVIEW_BOX_PADDING = 4
+internal const val PREVIEW_TEXT_TO_HEIGHT_RATIO = 18 / 9
 
 private val PREVIEW_FADE_IN = fadeIn(tween(200))
 private val PREVIEW_FADE_OUT = fadeOut(tween(400))
@@ -94,7 +95,8 @@ internal fun ThumbPreview(
             uiState = uiState,
             thumbSize = thumbSize,
             startOffset = additionalStartPaddingPxls,
-            endOffset = additionalEndPaddingPxls
+            endOffset = additionalEndPaddingPxls,
+            previewHeight = previewHeight,
         )
 
         ThumbImagePreview(
@@ -103,7 +105,7 @@ internal fun ThumbPreview(
             thumbSize,
             additionalStartPaddingPxls,
             additionalEndPaddingPxls,
-            previewHeight
+            previewHeight,
         )
     }
 }
@@ -115,7 +117,8 @@ private fun ThumbTextPreview(
     uiState: NewPlayerUIState,
     thumbSize: Dp,
     startOffset: Int,
-    endOffset: Int
+    endOffset: Int,
+    previewHeight: Dp,
 ) {
 
     val textHeight = 30.dp
@@ -133,6 +136,7 @@ private fun ThumbTextPreview(
             Modifier, uiState, thumbSize, startOffset = startOffset, endOffset = endOffset
         ) {
             Text(
+                modifier = Modifier.width(previewHeight * PREVIEW_TEXT_TO_HEIGHT_RATIO),
                 text = uiState.currentSeekPreviewText ?: "",
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.bodyMedium,
@@ -175,23 +179,23 @@ private fun ThumbImagePreview(
         }
 
         lastAvailableImage?.let { lastAvailableImage ->
-        PlaceRelativeToThumbSliderLayout(
-            Modifier.wrapContentSize(),
-            uiState = uiState,
-            thumbSize = thumbSize,
-            startOffset = additionalStartPaddingPxls,
-            endOffset = additionalEndPaddingPxls
-        ) {
-            Box(
-                modifier = Modifier.wrapContentSize()
+            PlaceRelativeToThumbSliderLayout(
+                Modifier.wrapContentSize(),
+                uiState = uiState,
+                thumbSize = thumbSize,
+                startOffset = additionalStartPaddingPxls,
+                endOffset = additionalEndPaddingPxls
             ) {
-                Card(
-                    modifier = Modifier
-                        .padding(PREVIEW_BOX_PADDING.dp)
-                        .height(previewHeight)
-                        .aspectRatio(lastAvailableImage.width.toFloat() / lastAvailableImage.height.toFloat()),
-                    elevation = CardDefaults.cardElevation(PREVIEW_BOX_PADDING.dp)
+                Box(
+                    modifier = Modifier.wrapContentSize()
                 ) {
+                    Card(
+                        modifier = Modifier
+                            .padding(PREVIEW_BOX_PADDING.dp)
+                            .height(previewHeight)
+                            .aspectRatio(lastAvailableImage.width.toFloat() / lastAvailableImage.height.toFloat()),
+                        elevation = CardDefaults.cardElevation(PREVIEW_BOX_PADDING.dp)
+                    ) {
                         Image(
                             modifier = Modifier.fillMaxSize(),
                             bitmap = lastAvailableImage,
