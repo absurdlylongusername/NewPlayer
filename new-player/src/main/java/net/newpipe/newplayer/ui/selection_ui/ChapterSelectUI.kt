@@ -50,7 +50,7 @@ import net.newpipe.newplayer.ui.common.getInsets
 internal fun ChapterSelectUI(
     viewModel: InternalNewPlayerViewModel,
     uiState: NewPlayerUIState,
-    shownInAudioPlayer: Boolean
+    shownInAudioPlayer: Boolean,
 ) {
     val insets = getInsets()
 
@@ -60,10 +60,11 @@ internal fun ChapterSelectUI(
         modifier = Modifier
             .fillMaxSize()
             .windowInsetsPadding(insets),
-        containerColor = if (shownInAudioPlayer)
+        containerColor = if (shownInAudioPlayer) {
             MaterialTheme.colorScheme.background
-        else
-            Color.Transparent,
+        } else {
+            Color.Transparent
+        },
         topBar = {
             ChapterSelectTopBar(
                 onClose = {
@@ -90,12 +91,16 @@ internal fun ChapterSelectUI(
                         chapterStartInMs = chapter.chapterStartInMs,
                         thumbnail = chapter.thumbnail,
                         onClicked = {
+                            if (!uiState.uiMode.isChapterSelect) {
+                                // We don't select the chapter when we are not in chapter select mode
+                                return@ChapterItem
+                            }
                             viewModel.chapterSelected(chapterIndex)
                         },
                         isCurrentChapter = isActiveChapter(
-                            chapterIndex,
+                            chapterId = chapterIndex,
                             uiState.chapters,
-                            uiState.playbackPositionInMs
+                            playbackPosition = uiState.playbackPositionInMs
                         )
                     )
                 }
