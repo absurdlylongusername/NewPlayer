@@ -132,8 +132,7 @@ internal fun VideoPlayerUi(viewModel: InternalNewPlayerViewModel, uiState: NewPl
         )
 
         // Disable this animation as it induces ghost tabs
-        //AnimatedVisibility(visible = uiState.uiMode.isStreamSelect) {
-        if (uiState.uiMode.isStreamSelect) {
+        AnimatedVisibility(visible = uiState.uiMode.isStreamSelect) {
             Surface(
                 modifier = Modifier.fillMaxSize(),
                 color = STREAMSELECT_UI_BACKGROUND_COLOR
