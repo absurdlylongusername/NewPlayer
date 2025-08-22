@@ -590,8 +590,10 @@ class NewPlayerViewModelImpl @Inject constructor(
     override fun brightnessChange(changeRate: Float, systemBrightness: Float) {
         mutableUiState.update {
             if (it.uiMode.fullscreen) {
-                val currentBrightness = it.brightness
-                    ?: systemBrightness
+                val currentBrightness = when(val brightness = it.brightness) {
+                    -1f -> systemBrightness
+                    else -> brightness
+                }
                 Log.d(
                     TAG,
                     "currentBrightnes: $currentBrightness, sytemBrightness: $systemBrightness, changeRate: $changeRate"
