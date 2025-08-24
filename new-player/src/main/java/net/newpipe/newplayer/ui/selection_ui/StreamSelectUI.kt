@@ -122,7 +122,7 @@ internal fun ReorderableStreamItemsList(
                     playlistItem = playlistItem,
                     onClicked = {
                         if (!uiState.uiMode.isStreamSelect) {
-                            // We don't select the chapter when we are not in stream select mode
+                            // We don't select the stream when we are not in stream select mode
                             return@StreamItem
                         }
                         viewModel.streamSelected(index)

@@ -131,7 +131,6 @@ internal fun VideoPlayerUi(viewModel: InternalNewPlayerViewModel, uiState: NewPl
             viewModel, uiState = uiState
         )
 
-        // Disable this animation as it induces ghost tabs
         AnimatedVisibility(visible = uiState.uiMode.isStreamSelect) {
             Surface(
                 modifier = Modifier.fillMaxSize(),
@@ -145,7 +144,6 @@ internal fun VideoPlayerUi(viewModel: InternalNewPlayerViewModel, uiState: NewPl
             }
         }
 
-        // Disable this animation as it induces ghost tabs
         AnimatedVisibility(visible = uiState.uiMode.isChapterSelect) {
             Surface(
                 modifier = Modifier.fillMaxSize(),
