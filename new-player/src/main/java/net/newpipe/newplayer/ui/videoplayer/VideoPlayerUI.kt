@@ -22,6 +22,8 @@ package net.newpipe.newplayer.ui.videoplayer
 
 import android.os.Build
 import androidx.annotation.OptIn
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -129,9 +131,7 @@ internal fun VideoPlayerUi(viewModel: InternalNewPlayerViewModel, uiState: NewPl
             viewModel, uiState = uiState
         )
 
-        // Disable this animation as it induces ghost tabs
-        //AnimatedVisibility(visible = uiState.uiMode.isStreamSelect) {
-        if (uiState.uiMode.isStreamSelect) {
+        AnimatedVisibility(visible = uiState.uiMode.isStreamSelect) {
             Surface(
                 modifier = Modifier.fillMaxSize(),
                 color = STREAMSELECT_UI_BACKGROUND_COLOR
@@ -144,9 +144,7 @@ internal fun VideoPlayerUi(viewModel: InternalNewPlayerViewModel, uiState: NewPl
             }
         }
 
-        // Disable this animation as it induces ghost tabs
-        //AnimatedVisibility(visible = uiState.uiMode.isChapterSelect) {
-        if (uiState.uiMode.isChapterSelect) {
+        AnimatedVisibility(visible = uiState.uiMode.isChapterSelect) {
             Surface(
                 modifier = Modifier.fillMaxSize(),
                 color = STREAMSELECT_UI_BACKGROUND_COLOR

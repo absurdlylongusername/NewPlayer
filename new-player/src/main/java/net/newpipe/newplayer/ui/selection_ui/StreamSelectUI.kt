@@ -120,7 +120,13 @@ internal fun ReorderableStreamItemsList(
             ) { isDragging ->
                 StreamItem(
                     playlistItem = playlistItem,
-                    onClicked = { viewModel.streamSelected(index) },
+                    onClicked = {
+                        if (!uiState.uiMode.isStreamSelect) {
+                            // We don't select the stream when we are not in stream select mode
+                            return@StreamItem
+                        }
+                        viewModel.streamSelected(index)
+                    },
                     reorderableScope = this@ReorderableItem,
                     haptic = haptic,
                     onDragFinished = viewModel::onStreamItemDragFinished,
