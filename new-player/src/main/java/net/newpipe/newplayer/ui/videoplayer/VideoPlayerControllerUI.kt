@@ -20,8 +20,13 @@
 
 package net.newpipe.newplayer.ui.videoplayer
 
+import android.util.Log
 import androidx.annotation.OptIn
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
@@ -44,6 +49,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.media3.common.util.UnstableApi
+import kotlinx.coroutines.delay
 import net.newpipe.newplayer.uiModel.NewPlayerUIState
 import net.newpipe.newplayer.uiModel.InternalNewPlayerViewModel
 import net.newpipe.newplayer.uiModel.NewPlayerViewModelDummy
@@ -75,7 +81,7 @@ internal fun VideoPlayerControllerUI(
 
     val insets = getInsets()
 
-    AnimatedVisibility(uiState.uiMode.videoControllerUiVisible) {
+    AnimateVideoControlVisibility(uiState.uiMode.videoControllerUiVisible) {
         Surface(
             modifier = Modifier.fillMaxSize(), color = CONTROLLER_UI_BACKGROUND_COLOR
         ) {}
@@ -83,7 +89,7 @@ internal fun VideoPlayerControllerUI(
 
     GestureUI(
         modifier = Modifier.fillMaxSize(), viewModel = viewModel, uiState = uiState,
-        onVolumeIndicatorVisibilityChanged = {volumeIndicatorVissible = it}
+        onVolumeIndicatorVisibilityChanged = { volumeIndicatorVissible = it }
     )
 
     AnimatedVisibility(uiState.isLoading) {
@@ -98,7 +104,10 @@ internal fun VideoPlayerControllerUI(
         }
     }
 
-    AnimatedVisibility(uiState.uiMode.videoControllerUiVisible) {
+
+    AnimateVideoControlVisibility(
+        uiState.uiMode.videoControllerUiVisible,
+    ) {
 
         AnimatedVisibility(visible = !uiState.isLoading && !volumeIndicatorVissible) {
             Box(modifier = Modifier.fillMaxSize()) {
@@ -139,6 +148,19 @@ internal fun VideoPlayerControllerUI(
 ///////////////////////////////////////////////////////////////////
 // Utils
 ///////////////////////////////////////////////////////////////////
+
+@Composable
+fun AnimateVideoControlVisibility(visible: Boolean, content: @Composable () -> Unit) {
+    AnimatedVisibility(
+        visible,
+        enter = fadeIn(animationSpec = tween(durationMillis = 100, easing = LinearEasing)),
+        exit = fadeOut(animationSpec = tween(durationMillis = 100, easing = LinearEasing))
+    ) {
+        Log.d("GestureSurface", "=========");
+        content()
+    }
+}
+
 
 @Composable
 

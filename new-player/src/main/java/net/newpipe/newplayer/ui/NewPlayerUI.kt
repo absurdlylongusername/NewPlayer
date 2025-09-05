@@ -117,7 +117,7 @@ fun NewPlayerUI(
         ) {
             val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
             windowInsetsController.systemBarsBehavior =
-                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                WindowInsetsControllerCompat.BEHAVIOR_DEFAULT
 
             if (uiState.uiMode.systemInsetsVisible) {
                 windowInsetsController.show(WindowInsetsCompat.Type.systemBars())
