@@ -20,6 +20,7 @@
 
 package net.newpipe.newplayer.ui.videoplayer.gesture_ui
 
+import android.util.Log
 import android.view.MotionEvent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -36,13 +37,16 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInteropFilter
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 
-private const val MULTITAB_MODE_DELAY: Long = 300
+private const val TAG = "GestureSurface"
 
+private const val ENTER_MULTITAB_MODE_DELAY: Long = 300
 
 @Composable
 @OptIn(ExperimentalComposeUiApi::class)
@@ -67,8 +71,12 @@ internal fun GestureSurface(
         mutableFloatStateOf(0f)
     }
 
+    var lastFingerDownTime by remember {
+        mutableStateOf(0L)
+    }
+
     var lastFingerUpTime by remember {
-        mutableStateOf(System.currentTimeMillis())
+        mutableStateOf(0L)
     }
 
     val composableScope = rememberCoroutineScope()
@@ -76,14 +84,7 @@ internal fun GestureSurface(
         mutableStateOf(null)
     }
 
-    val defaultActionDown = { event: MotionEvent ->
-        lastTouchedPosition = TouchedPosition(event.x, event.y)
-        yMovementSum = 0f
-
-        true
-    }
-
-    var multitapAmount:Int by remember {
+    var multitapAmount: Int by remember {
         mutableIntStateOf(0)
     }
 
@@ -91,33 +92,74 @@ internal fun GestureSurface(
         mutableStateOf(null)
     }
 
-    val defaultActionUp = { onMultiTap: (Int) -> Unit, onRegularTap: () -> Unit ->
-        onUp()
-
-        if (yMovementSum < 10) {
-            val currentTime = System.currentTimeMillis()
-            val timeSinceLastTouch = currentTime - lastFingerUpTime
-            if (timeSinceLastTouch <= MULTITAB_MODE_DELAY) {
-                regularTabJob?.cancel()
-                cancelMultitapJob?.cancel()
-                multitapAmount++
-                onMultiTap(multitapAmount)
-                cancelMultitapJob = composableScope.launch {
-                    delay(MULTITAB_MODE_DELAY)
-                    multitapAmount = 0
-                    onMultiTapFinished()
-                }
-            } else {
-                regularTabJob = composableScope.launch {
-                    delay(MULTITAB_MODE_DELAY)
-                    onRegularTap()
-                }
-            }
-
-            lastFingerUpTime = currentTime
+    val onMultitap = {
+        Log.d(TAG, "Trigger multitab")
+        regularTabJob?.cancel()
+        cancelMultitapJob?.cancel()
+        multitapAmount++
+        onMultiTap(multitapAmount)
+        cancelMultitapJob = composableScope.launch {
+            delay(ENTER_MULTITAB_MODE_DELAY)
+            multitapAmount = 0
+            onMultiTapFinished()
         }
+    }
+
+    /*
+     * Only use this function in tab down.
+     */
+    val isAMultitapEvent = {
+        val currentTime = System.currentTimeMillis()
+        val timeSinceLastFingerDown = currentTime - lastFingerDownTime
+        timeSinceLastFingerDown <= ENTER_MULTITAB_MODE_DELAY
+    }
+
+    val fingerDownAndUpHappenedInShortEnoughTimeForARegularTab = {
+        val current = System.currentTimeMillis()
+        val timeSinceLastFingerUp = current - lastFingerUpTime
+        timeSinceLastFingerUp < ENTER_MULTITAB_MODE_DELAY
+    }
+
+    val startToFigureOutIfItsRegularTab = {
+        Log.d(TAG, "    Maybe regular tab?")
+        regularTabJob = composableScope.launch {
+            delay(ENTER_MULTITAB_MODE_DELAY)
+
+            val isMultitab =  isAMultitapEvent();
+            val fingerDownUpOk = fingerDownAndUpHappenedInShortEnoughTimeForARegularTab()
+            if (multitapAmount <= 0 && fingerDownUpOk) {
+                onRegularTap()
+                Log.d(TAG, "    Yes Tab")
+            } else {
+                Log.d(TAG, "    No Tab: multitab: $isMultitab, downUpOk: $fingerDownUpOk")
+            }
+        }
+    }
+
+
+    val handleActionDown = { event: MotionEvent ->
+        Log.d(TAG, "finger down")
+        lastTouchedPosition = TouchedPosition(event.x, event.y)
         yMovementSum = 0f
+        if (isAMultitapEvent()) {
+            onMultitap();
+        } else {
+            startToFigureOutIfItsRegularTab()
+        }
+        lastFingerDownTime = System.currentTimeMillis()
         true
+    }
+
+    val handleActionUp = { onMultiTap: (Int) -> Unit, onRegularTap: () -> Unit ->
+        Log.d(TAG, "finger up");
+        onUp()
+        yMovementSum = 0f
+        lastFingerUpTime = System.currentTimeMillis();
+        true
+    }
+
+    val rangeAtWhichItsIntendedMovement = with(LocalDensity.current) {
+        15.dp.toPx()
     }
 
     val handleMove = { event: MotionEvent, lambda: (movement: TouchedPosition) -> Unit ->
@@ -128,8 +170,13 @@ internal fun GestureSurface(
 
         yMovementSum += abs(movement.y)
 
+        if (yMovementSum < rangeAtWhichItsIntendedMovement) {
+            Log.d(TAG, "    cancel regular tab")
+            regularTabJob?.cancel()
+        }
+
         // filter out left and right movements as these are not important for the app
-        if(abs(movement.x) <= abs(movement.y)) {
+        if (abs(movement.x) <= abs(movement.y)) {
             lambda(movement)
         }
         true
@@ -137,8 +184,8 @@ internal fun GestureSurface(
 
     Box(modifier = modifier.pointerInteropFilter {
         when (it.action) {
-            MotionEvent.ACTION_DOWN -> defaultActionDown(it)
-            MotionEvent.ACTION_UP -> defaultActionUp(onMultiTap, onRegularTap)
+            MotionEvent.ACTION_DOWN -> handleActionDown(it)
+            MotionEvent.ACTION_UP -> handleActionUp(onMultiTap, onRegularTap)
             MotionEvent.ACTION_MOVE -> handleMove(it, onMovement)
 
             else -> false
