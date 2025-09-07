@@ -29,7 +29,7 @@ plugins {
 
 android {
     namespace = "net.newpipe.newplayer.testapp"
-    compileSdk = 35
+    compileSdk = 36
 
     viewBinding {
         enable = true
@@ -49,7 +49,7 @@ android {
     defaultConfig {
         applicationId = "net.newpipe.newplayer.testapp"
         minSdk = 21
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -63,8 +63,7 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
     }
@@ -122,6 +121,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(kotlin("test"))
 
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)

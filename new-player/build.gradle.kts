@@ -14,7 +14,7 @@ plugins {
 
 android {
     namespace = "net.newpipe.newplayer"
-    compileSdk = 35
+    compileSdk = 36
 
     buildFeatures {
         compose = true
@@ -87,6 +87,8 @@ dependencies {
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation(libs.androidx.ui.test.manifest)
 }
 
 
