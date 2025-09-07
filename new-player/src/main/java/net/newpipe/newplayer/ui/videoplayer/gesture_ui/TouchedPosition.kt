@@ -20,8 +20,14 @@
 
 package net.newpipe.newplayer.ui.videoplayer.gesture_ui
 
+import kotlin.math.pow
+import kotlin.math.sqrt
+
 
 /** @hide */
 internal data class TouchedPosition(val x: Float, val y: Float) {
     operator fun minus(other: TouchedPosition) = TouchedPosition(this.x - other.x, this.y - other.y)
+
+    fun distance() =
+        sqrt(x.pow(1) + y.pow(2))
 }

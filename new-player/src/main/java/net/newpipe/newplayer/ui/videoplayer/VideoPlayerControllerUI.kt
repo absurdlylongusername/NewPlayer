@@ -156,7 +156,6 @@ fun AnimateVideoControlVisibility(visible: Boolean, content: @Composable () -> U
         enter = fadeIn(animationSpec = tween(durationMillis = 100, easing = LinearEasing)),
         exit = fadeOut(animationSpec = tween(durationMillis = 100, easing = LinearEasing))
     ) {
-        Log.d("GestureSurface", "=========");
         content()
     }
 }

@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,11 +36,10 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInteropFilter
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import net.newpipe.newplayer.ui.common.getPixelsPerCentimeter
 import kotlin.math.abs
 
 private const val TAG = "GestureSurface"
@@ -63,12 +61,20 @@ internal fun GestureSurface(
     content: @Composable () -> Unit = {}
 ) {
 
-    var lastTouchedPosition by remember {
+    var movementEventsUnlocked by remember {
+        mutableStateOf(false)
+    }
+
+    var ignoreMovementWhileFingerDown by remember {
+        mutableStateOf(false)
+    }
+
+    var fingerDownPosition by remember {
         mutableStateOf(TouchedPosition(0f, 0f))
     }
 
-    var yMovementSum by remember {
-        mutableFloatStateOf(0f)
+    var lastTouchPosition by remember {
+        mutableStateOf(TouchedPosition(0f, 0f))
     }
 
     var lastFingerDownTime by remember {
@@ -125,7 +131,7 @@ internal fun GestureSurface(
         regularTabJob = composableScope.launch {
             delay(ENTER_MULTITAB_MODE_DELAY)
 
-            val isMultitab =  isAMultitapEvent();
+            val isMultitab = isAMultitapEvent();
             val fingerDownUpOk = fingerDownAndUpHappenedInShortEnoughTimeForARegularTab()
             if (multitapAmount <= 0 && fingerDownUpOk) {
                 onRegularTap()
@@ -136,11 +142,13 @@ internal fun GestureSurface(
         }
     }
 
-
     val handleActionDown = { event: MotionEvent ->
         Log.d(TAG, "finger down")
-        lastTouchedPosition = TouchedPosition(event.x, event.y)
-        yMovementSum = 0f
+        fingerDownPosition = TouchedPosition(event.x, event.y)
+        lastTouchPosition = fingerDownPosition
+        movementEventsUnlocked = false
+        ignoreMovementWhileFingerDown = false
+
         if (isAMultitapEvent()) {
             onMultitap();
         } else {
@@ -151,36 +159,48 @@ internal fun GestureSurface(
     }
 
     val handleActionUp = { onMultiTap: (Int) -> Unit, onRegularTap: () -> Unit ->
-        Log.d(TAG, "finger up");
+        Log.d(TAG, "finger up")
         onUp()
-        yMovementSum = 0f
-        lastFingerUpTime = System.currentTimeMillis();
+        lastFingerUpTime = System.currentTimeMillis()
+        movementEventsUnlocked = false
+        ignoreMovementWhileFingerDown = false
         true
     }
 
-    val rangeAtWhichItsIntendedMovement = with(LocalDensity.current) {
-        15.dp.toPx()
-    }
+    // prevents detecting movement when actually a tap was intended
+    val deadZoneRange = 0.1 * getPixelsPerCentimeter()
 
-    val handleMove = { event: MotionEvent, lambda: (movement: TouchedPosition) -> Unit ->
-        val currentTouchedPosition = TouchedPosition(event.x, event.y)
-        val movement = currentTouchedPosition - lastTouchedPosition
 
-        lastTouchedPosition = currentTouchedPosition
+    val handleMove =
+        { event: MotionEvent, onFilteredMovementEvent: (movement: TouchedPosition) -> Unit ->
+            val currentTouchedPosition = TouchedPosition(event.x, event.y)
+            val movement = currentTouchedPosition - lastTouchPosition
+            val vectorFromFingerDownEvent = currentTouchedPosition - fingerDownPosition
 
-        yMovementSum += abs(movement.y)
+            lastTouchPosition = currentTouchedPosition
 
-        if (yMovementSum < rangeAtWhichItsIntendedMovement) {
-            Log.d(TAG, "    cancel regular tab")
-            regularTabJob?.cancel()
+            if (!movementEventsUnlocked && deadZoneRange < vectorFromFingerDownEvent.distance()) {
+                movementEventsUnlocked = true
+                if (regularTabJob?.isActive ?: false) {
+                    Log.d(TAG, "    cancel regular tab")
+                    regularTabJob?.cancel()
+                }
+                // if user starts to swipe sideways the movements should be totally ignore
+                // for as long as the user keeps the finger on the screen.
+                if (abs(vectorFromFingerDownEvent.y) <= abs(vectorFromFingerDownEvent.x)) {
+                    ignoreMovementWhileFingerDown = true
+                }
+            }
+
+            if (movementEventsUnlocked && !ignoreMovementWhileFingerDown) {
+                Log.d(TAG, "movement event: distance")
+                // filter out left and right movements as these are not important for the app
+                if (abs(movement.x) <= abs(movement.y)) {
+                    onFilteredMovementEvent(movement)
+                }
+            }
+            true
         }
-
-        // filter out left and right movements as these are not important for the app
-        if (abs(movement.x) <= abs(movement.y)) {
-            lambda(movement)
-        }
-        true
-    }
 
     Box(modifier = modifier.pointerInteropFilter {
         when (it.action) {
@@ -195,3 +215,4 @@ internal fun GestureSurface(
         Surface(color = color, modifier = Modifier.fillMaxSize()) {}
     }
 }
+
