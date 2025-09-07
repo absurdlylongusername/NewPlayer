@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 /* NewPlayer
  *
  * @author Christian Schabesberger
@@ -71,8 +73,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-    kotlinOptions {
-        jvmTarget = "1.8"
+    kotlin {
+        compilerOptions {
+            jvmTarget = JvmTarget.fromTarget("1.8")
+        }
     }
     packaging {
         resources {
@@ -106,6 +110,7 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.coil.compose)
     implementation(libs.okhttp.android)
+    implementation(libs.okhttp)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
 

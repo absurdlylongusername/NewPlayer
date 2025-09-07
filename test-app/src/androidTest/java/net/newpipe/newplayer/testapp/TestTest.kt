@@ -19,9 +19,11 @@ class TestTest {
     @Test
     fun testTest() {
         composeTestRule.onNodeWithText("Start 6502 Stream").performClick()
+        /*
         composeTestRule.waitUntil(timeoutMillis = 5000) {
             assertEquals(5, 5)
             true
         }
+         */
     }
 }
