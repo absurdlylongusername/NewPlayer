@@ -92,7 +92,7 @@ internal fun selectStreamAutomatically(
 
                 val audioStream = tryAndGetMedianAudioOnlyTracks(availableStreams)
 
-                if (videoOnlyStream != null && audioStream != null) {
+                if (audioStream != null) {
                     return MultiSelection(listOf(videoOnlyStream, audioStream))
                 }
             } /* if (vdeioOnlyStream != null) */

@@ -32,10 +32,10 @@ import net.newpipe.newplayer.ui.NewPlayerUI
  * EmbeddedUiConfig in the [NewPlayerUIState]. When returning from fullscreen mode
  * [NewPlayerUI] will then restore that configuration.
  *
- * TODO: At least in theory. Brightnes and the systembar theme don't work (correctly) right now.
+ * TODO: At least in theory. Brightness and the system bar theme don't work (correctly) right now.
  *
  */
-@Parcelize
+@kotlinx.parcelize.Parcelize
 data class EmbeddedUiConfig(
     val systemBarInLightMode: Boolean,
     val brightness: Float,

@@ -20,16 +20,12 @@
 
 package net.newpipe.newplayer.ui.videoplayer.gesture_ui
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.keyframes
 import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -41,9 +37,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -53,7 +46,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.android.material.color.MaterialColors
 import net.newpipe.newplayer.R
 import net.newpipe.newplayer.ui.theme.VideoPlayerTheme
 import net.newpipe.newplayer.ui.videoplayer.INDICATOR_BACKGROUND_COLOR
@@ -95,8 +87,8 @@ internal fun FastSeekVisualFeedback(modifier: Modifier = Modifier, seconds: Int,
         animationSpec = infiniteRepeatable(
             animation = keyframes {
                 durationMillis = SEEK_ANIMATION_DURATION_IN_MS
-                Color.White.copy(alpha = 1f) at 0 with LinearEasing
-                Color.White.copy(alpha = 0f) at SEEK_ANIMATION_DURATION_IN_MS with LinearEasing
+                Color.White.copy(alpha = 1f) at 0 using LinearEasing
+                Color.White.copy(alpha = 0f) at SEEK_ANIMATION_DURATION_IN_MS using LinearEasing
             },
             repeatMode = RepeatMode.Restart
         ), label = "Arrow1 animation"
@@ -108,10 +100,10 @@ internal fun FastSeekVisualFeedback(modifier: Modifier = Modifier, seconds: Int,
         animationSpec = infiniteRepeatable(
             animation = keyframes {
                 durationMillis = SEEK_ANIMATION_DURATION_IN_MS
-                Color.White.copy(alpha = 1f / 3f) at 0 with LinearEasing
-                Color.White.copy(alpha = 0f) at SEEK_ANIMATION_DURATION_IN_MS / 3 with LinearEasing
-                Color.White.copy(alpha = 1f) at SEEK_ANIMATION_DURATION_IN_MS / 3 + 1 with LinearEasing
-                Color.White.copy(alpha = 2f / 3f) at SEEK_ANIMATION_DURATION_IN_MS with LinearEasing
+                Color.White.copy(alpha = 1f / 3f) at 0 using LinearEasing
+                Color.White.copy(alpha = 0f) at SEEK_ANIMATION_DURATION_IN_MS / 3 using LinearEasing
+                Color.White.copy(alpha = 1f) at SEEK_ANIMATION_DURATION_IN_MS / 3 + 1 using LinearEasing
+                Color.White.copy(alpha = 2f / 3f) at SEEK_ANIMATION_DURATION_IN_MS using LinearEasing
             },
             repeatMode = RepeatMode.Restart
         ), label = "Arrow2 animation"
@@ -123,10 +115,10 @@ internal fun FastSeekVisualFeedback(modifier: Modifier = Modifier, seconds: Int,
         animationSpec = infiniteRepeatable(
             animation = keyframes {
                 durationMillis = SEEK_ANIMATION_DURATION_IN_MS
-                Color.White.copy(alpha = 2f / 3f) at 0 with LinearEasing
-                Color.White.copy(alpha = 0f) at 2 * SEEK_ANIMATION_DURATION_IN_MS / 3 with LinearEasing
-                Color.White.copy(alpha = 1f) at 2 * SEEK_ANIMATION_DURATION_IN_MS / 3 + 1 with LinearEasing
-                Color.White.copy(alpha = 2f / 3f) at SEEK_ANIMATION_DURATION_IN_MS with LinearEasing
+                Color.White.copy(alpha = 2f / 3f) at 0 using LinearEasing
+                Color.White.copy(alpha = 0f) at 2 * SEEK_ANIMATION_DURATION_IN_MS / 3 using LinearEasing
+                Color.White.copy(alpha = 1f) at 2 * SEEK_ANIMATION_DURATION_IN_MS / 3 + 1 using LinearEasing
+                Color.White.copy(alpha = 2f / 3f) at SEEK_ANIMATION_DURATION_IN_MS using LinearEasing
             },
             repeatMode = RepeatMode.Restart
         ), label = "Arrow3 animation"

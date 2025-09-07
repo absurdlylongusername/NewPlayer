@@ -51,7 +51,7 @@ internal data class CustomCommand(
 internal fun buildCustomCommandList(context: Context) = listOf(
     CustomCommand(
         CustomCommand.NEW_PLAYER_NOTIFICATION_COMMAND_CLOSE_PLAYBACK,
-        CommandButton.Builder()
+        CommandButton.Builder(CommandButton.ICON_UNDEFINED)
             .setDisplayName(context.getString(R.string.close))
             .setDisplayName("Close")
             .setSessionCommand(
@@ -60,7 +60,7 @@ internal fun buildCustomCommandList(context: Context) = listOf(
                     Bundle()
                 )
             )
-            .setIconResId(R.drawable.close_24px)
+            .setCustomIconResId(R.drawable.close_24px)
             .build()
     )
 )
