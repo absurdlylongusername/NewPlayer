@@ -27,7 +27,7 @@ NewPlayer is a media framework, which is independent of NewPipe itself. I decide
 ### Let me give you a Profile about NewPlayer:
 - It is a module, separate from NewPipe and can be used as an independent player framework
 - It is based on the [Media3](https://developer.android.com/media/media3) library
-- Its UI is created with [Jetpack Compose](https://developer.android.com/compose)
+- It's UI is created with [Jetpack Compose](https://developer.android.com/compose)
 - It's fully written in Kotlin
 - Its UI resembles the UI of the current NewPipe player, but improves it
 - The UI uses [Material You](https://m3.material.io/blog/announcing-material-you) theming
