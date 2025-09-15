@@ -116,6 +116,7 @@ dependencies {
 
     // development impl
     implementation(project(":new-player"))
+    androidTestImplementation(libs.hilt.android.testing)
     //jitpack test
     //implementation(libs.newplayer)
 

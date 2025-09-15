@@ -7,15 +7,18 @@ import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.filters.SmallTest
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
-@SmallTest
+@HiltAndroidTest
 class TestTest {
+    @get:Rule
+    var hiltRule = HiltAndroidRule(this)
+
     @get:Rule
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
@@ -27,6 +30,8 @@ class TestTest {
     fun testTest() {
         //composeTestRule.onNodeWithText("Start 6502 Stream").performClick()
         onView(ViewMatchers.withText("Start 6502 Stream")).perform(ViewActions.click())
-
+        composeTestRule.waitUntil(timeoutMillis = 5000) {
+            true
+        }
     }
 }

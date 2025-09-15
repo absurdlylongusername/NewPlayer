@@ -73,6 +73,7 @@ hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref
 androidx-hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltCompiler" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hiltAndroid" }
+hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hiltAndroid"}
 androidx-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
 androidx-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "uiTooling" }
 androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragmentKtx" }
@@ -94,6 +95,7 @@ androidx-adaptive-android = { group = "androidx.compose.material3.adaptive", nam
 dokka-base = { module = "org.jetbrains.dokka:dokka-base", version.ref = "dokkaVersion" }
 dokka-android = {module = "org.jetbrains.dokka:android-documentation-plugin", version.ref = "dokkaVersion" }
 newplayer = { group = "com.github.theScrabi.NewPlayer", name = "new-player", version.ref = "newplayer" }
+
 
 
 [plugins]
