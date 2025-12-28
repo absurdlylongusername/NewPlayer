@@ -5,8 +5,8 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Rule
@@ -15,23 +15,36 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
-class TestTest {
-    @get:Rule
-    var hiltRule = HiltAndroidRule(this)
+class SmokeTest {
+    @get:Rule(order = 0)
+    val hiltRule = HiltAndroidRule(this)
 
-    @get:Rule
+    @get:Rule(order = 1)
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
-    @get:Rule
-    val activityRule = ActivityScenarioRule(MainActivity::class.java)
+    @Test
+    fun smokeTest() {
+        onView(ViewMatchers.withText("Start 6502 Stream")).perform(ViewActions.click())
+    }
 
     @OptIn(ExperimentalTestApi::class)
     @Test
-    fun testTest() {
-        //composeTestRule.onNodeWithText("Start 6502 Stream").performClick()
+    fun checkNewPlayerIsPlayingTest() {
         onView(ViewMatchers.withText("Start 6502 Stream")).perform(ViewActions.click())
+
         composeTestRule.waitUntil(timeoutMillis = 5000) {
-            true
+            var isPlaying = false
+            InstrumentationRegistry.getInstrumentation().runOnMainSync {
+                isPlaying = composeTestRule.activity.newPlayer.exoPlayer.value?.isPlaying ?: false
+            }
+            isPlaying
         }
+
+        // catuall test
+        var isPlaying = false
+        InstrumentationRegistry.getInstrumentation().runOnMainSync {
+            isPlaying = composeTestRule.activity.newPlayer.exoPlayer.value?.isPlaying ?: false
+        }
+        assert(isPlaying)
     }
 }
