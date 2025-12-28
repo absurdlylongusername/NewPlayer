@@ -71,6 +71,11 @@ private const val TAG = "VideoPlayerUI"
  * or views are hidden and only NewPlayerUI is visible. You can read more about this in
  * the [NewPlayerViewModel], since the [viewModel] is responsible to tell your UI how to behave
  * in such cases.
+ *
+ * @param viewModel the NewPlayerViewModel that should control this NewPlayerUi.
+ * @param lightColorScheme is the color scheme used by non video ui related composables, when the system is in light mode.
+ * @param darkColorScheme is the color scheme used by the video ui related composables, and the rest of the ui if the system is in dark mode.
+ * @param the typography used by NewPlayer
  */
 @OptIn(UnstableApi::class)
 @Composable

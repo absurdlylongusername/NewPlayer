@@ -131,14 +131,14 @@ class MainActivity : AppCompatActivity() {
                         removeSystemInsets()
                         binding.embeddedPlayer.viewModel = null
                         binding.fullscreenPlayer.viewModel = newPlayerViewModel
-                        binding.buttonsLayout.visibility = View.GONE
+                        binding.buttonsLayout!!.visibility = View.GONE
                         binding.embeddedPlayerLayout.visibility = View.GONE
                         binding.fullscreenPlayer.visibility = View.VISIBLE
                     } else {
                         addSystemInsets()
                         binding.fullscreenPlayer.viewModel = null
                         binding.embeddedPlayer.viewModel = newPlayerViewModel
-                        binding.buttonsLayout.visibility = View.VISIBLE
+                        binding.buttonsLayout!!.visibility = View.VISIBLE
                         binding.embeddedPlayerLayout.visibility = View.VISIBLE
                         binding.fullscreenPlayer.visibility = View.GONE
                     }

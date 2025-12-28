@@ -119,7 +119,7 @@ internal fun AudioPlayerEmbeddedUI(viewModel: InternalNewPlayerViewModel, uiStat
                         top = 0.5.dp,
                         bottom = 0.5.dp
                     ),
-                    color = MaterialTheme.colorScheme.onBackground,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     text = getTimeStringFromMs(
                         uiState.durationInMs,
                         locale,
