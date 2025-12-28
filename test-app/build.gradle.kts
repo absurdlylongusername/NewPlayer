@@ -55,7 +55,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "net.newpipe.newplayer.testapp.HiltTestRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -116,6 +116,8 @@ dependencies {
 
     // development impl
     implementation(project(":new-player"))
+    androidTestImplementation(libs.hilt.android.testing)
+    kspAndroidTest(libs.hilt.android.compiler)
     //jitpack test
     //implementation(libs.newplayer)
 
