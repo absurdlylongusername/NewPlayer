@@ -46,7 +46,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import net.newpipe.newplayer.R
-import net.newpipe.newplayer.ui.theme.VideoPlayerTheme
+import net.newpipe.newplayer.ui.theme.VideoPlayerDarkTheme
 import net.newpipe.newplayer.ui.videoplayer.INDICATOR_BACKGROUND_COLOR
 
 private const val TAG = "VolumeCircle"
@@ -113,7 +113,7 @@ private fun getBrightnessIcon(volumeFraction: Float) =
 @Preview(device = "spec:width=1080px,height=600px,dpi=440,orientation=landscape")
 @Composable
 private fun VolumeCirclePreview() {
-    VideoPlayerTheme {
+    VideoPlayerDarkTheme {
         Surface(color = Color.White) {
             VolumeCircle(volumeFraction = 0.3f, isBrightness = false)
         }

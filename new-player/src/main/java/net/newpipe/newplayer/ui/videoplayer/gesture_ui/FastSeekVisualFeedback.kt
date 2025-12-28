@@ -47,7 +47,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import net.newpipe.newplayer.R
-import net.newpipe.newplayer.ui.theme.VideoPlayerTheme
+import net.newpipe.newplayer.ui.theme.VideoPlayerDarkTheme
 import net.newpipe.newplayer.ui.videoplayer.INDICATOR_BACKGROUND_COLOR
 
 
@@ -175,7 +175,7 @@ private fun SeekerIcon(backwards: Boolean, description: String, color: Color) {
 @Preview(device = "spec:width=1080px,height=600px,dpi=440,orientation=landscape")
 @Composable
 private fun FastSeekVisualFeedbackPreviewBackwards() {
-    VideoPlayerTheme {
+    VideoPlayerDarkTheme {
         Surface(modifier = Modifier.wrapContentSize(), color = Color.Gray) {
             FastSeekVisualFeedback(seconds = 10, backwards = true)
         }
@@ -185,7 +185,7 @@ private fun FastSeekVisualFeedbackPreviewBackwards() {
 @Preview(device = "spec:width=1080px,height=600px,dpi=440,orientation=landscape")
 @Composable
 private fun FastSeekVisualFeedbackPreview() {
-    VideoPlayerTheme {
+    VideoPlayerDarkTheme {
         Surface(modifier = Modifier.wrapContentSize(), color = Color.Gray) {
             FastSeekVisualFeedback(seconds = 10, backwards = false)
         }

@@ -74,10 +74,17 @@ enum class UIModeState {
                 AUDIO_CHAPTER_SELECT -> true
                 AUDIO_STREAM_SELECT -> true
                 PIP -> true
-                PLACEHOLDER -> false
-                EMBEDDED_VIDEO -> false
-                EMBEDDED_VIDEO_CONTROLLER_UI -> false
-                EMBEDDED_AUDIO -> false
+                else -> false
+            }
+
+    val forceSysUiDarkThemeMode : Boolean
+        get() =
+            when (this) {
+                FULLSCREEN_VIDEO -> true
+                FULLSCREEN_VIDEO_CONTROLLER_UI -> true
+                FULLSCREEN_VIDEO_CHAPTER_SELECT -> true
+                FULLSCREEN_VIDEO_STREAM_SELECT -> true
+                else -> false
             }
 
     val videoControllerUiVisible: Boolean

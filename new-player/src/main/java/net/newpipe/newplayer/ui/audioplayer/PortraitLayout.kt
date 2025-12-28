@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.media3.common.util.UnstableApi
 import net.newpipe.newplayer.ui.selection_ui.ReorderableStreamItemsList
 import net.newpipe.newplayer.ui.selection_ui.StreamSelectTopBar
-import net.newpipe.newplayer.ui.theme.VideoPlayerTheme
+import net.newpipe.newplayer.ui.theme.VideoPlayerDarkTheme
 import net.newpipe.newplayer.uiModel.InternalNewPlayerViewModel
 import net.newpipe.newplayer.uiModel.NewPlayerUIState
 import net.newpipe.newplayer.uiModel.NewPlayerViewModelDummy
@@ -97,7 +97,7 @@ private fun PortraitCoverArtOrPlaylistUI(
 @Preview(device = "id:pixel_6")
 @Composable
 private fun AudioPlayerUIPortraitPreview() {
-    VideoPlayerTheme {
+    VideoPlayerDarkTheme {
         Box(
             modifier = Modifier
                 .wrapContentSize()
@@ -117,7 +117,7 @@ private fun AudioPlayerUIPortraitPreview() {
 @Preview(device = "id:pixel_6")
 @Composable
 private fun AudioPlayerUIPortraitPreviewWithPlaylist() {
-    VideoPlayerTheme {
+    VideoPlayerDarkTheme {
         Box(
             modifier = Modifier
                 .wrapContentSize()

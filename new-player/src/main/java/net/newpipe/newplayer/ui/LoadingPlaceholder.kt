@@ -37,7 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import net.newpipe.newplayer.ui.theme.VideoPlayerTheme
+import net.newpipe.newplayer.ui.theme.VideoPlayerDarkTheme
 
 @Composable
 
@@ -64,7 +64,7 @@ internal fun LoadingPlaceholder(aspectRatio: Float = 3F / 1F) {
 @Preview(device = "spec:width=1080px,height=600px,dpi=440,orientation=landscape")
 @Composable
 private fun VideoPlayerLoaidingPlaceholderPreview() {
-    VideoPlayerTheme {
+    VideoPlayerDarkTheme {
         LoadingPlaceholder()
     }
 }

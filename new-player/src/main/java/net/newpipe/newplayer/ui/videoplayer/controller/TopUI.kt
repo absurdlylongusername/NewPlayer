@@ -40,6 +40,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -65,10 +66,9 @@ import net.newpipe.newplayer.uiModel.NewPlayerUIState
 import net.newpipe.newplayer.uiModel.InternalNewPlayerViewModel
 import net.newpipe.newplayer.uiModel.NewPlayerViewModelDummy
 import net.newpipe.newplayer.uiModel.UIModeState
-import net.newpipe.newplayer.ui.theme.VideoPlayerTheme
-import net.newpipe.newplayer.ui.theme.video_player_onSurface
 import net.newpipe.newplayer.ui.common.getEmbeddedUiConfig
 import net.newpipe.newplayer.ui.common.showNotYetImplementedToast
+import net.newpipe.newplayer.ui.theme.VideoPlayerDarkTheme
 
 @OptIn(UnstableApi::class)
 @Composable
@@ -199,7 +199,7 @@ private fun TrackSelectionMenu(viewModel: InternalNewPlayerViewModel, uiState: N
             },
             contentPadding = PaddingValues(0.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color.Transparent, contentColor = video_player_onSurface
+                containerColor = Color.Transparent, contentColor = MaterialTheme.colorScheme.onSurface
             ),
         ) {
             Text(
@@ -235,7 +235,7 @@ private fun TrackSelectionMenu(viewModel: InternalNewPlayerViewModel, uiState: N
 @Preview(device = "spec:parent=pixel_6,orientation=landscape")
 @Composable
 private fun VideoPlayerControllerTopUIPreview() {
-    VideoPlayerTheme {
+    VideoPlayerDarkTheme {
         Surface(color = Color.Black) {
             TopUI(
                 modifier = Modifier, NewPlayerViewModelDummy(), NewPlayerUIState.DUMMY.copy(

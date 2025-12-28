@@ -46,7 +46,7 @@ import net.newpipe.newplayer.uiModel.NewPlayerUIState
 import net.newpipe.newplayer.uiModel.InternalNewPlayerViewModel
 import net.newpipe.newplayer.uiModel.NewPlayerViewModelDummy
 import net.newpipe.newplayer.uiModel.UIModeState
-import net.newpipe.newplayer.ui.theme.VideoPlayerTheme
+import net.newpipe.newplayer.ui.theme.VideoPlayerDarkTheme
 import net.newpipe.newplayer.ui.videoplayer.CONTROLLER_UI_BACKGROUND_COLOR
 import net.newpipe.newplayer.ui.videoplayer.PreviewBackgroundSurface
 import net.newpipe.newplayer.ui.common.Thumbnail
@@ -59,7 +59,7 @@ import net.newpipe.newplayer.ui.common.getTimeStringFromMs
 
 /** @hide */
 internal fun AudioPlayerEmbeddedUI(viewModel: InternalNewPlayerViewModel, uiState: NewPlayerUIState) {
-    val locale = getLocale()!!
+    val locale = getLocale()
 
     val embeddedUIConfig = getEmbeddedUiConfig()
 
@@ -162,7 +162,7 @@ internal fun AudioPlayerEmbeddedUI(viewModel: InternalNewPlayerViewModel, uiStat
 @Preview(device = "spec:width=1080px,height=1080px,dpi=440,orientation=landscape")
 @Composable
 private fun AudioPlayerEmbeddedPreview() {
-    VideoPlayerTheme {
+    VideoPlayerDarkTheme {
         PreviewBackgroundSurface {
             AudioPlayerEmbeddedUI(
                 viewModel = NewPlayerViewModelDummy(),

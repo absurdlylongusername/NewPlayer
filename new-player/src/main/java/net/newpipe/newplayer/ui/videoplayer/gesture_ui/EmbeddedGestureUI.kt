@@ -45,7 +45,7 @@ import net.newpipe.newplayer.uiModel.NewPlayerUIState
 import net.newpipe.newplayer.uiModel.InternalNewPlayerViewModel
 import net.newpipe.newplayer.uiModel.NewPlayerViewModelDummy
 import net.newpipe.newplayer.uiModel.UIModeState
-import net.newpipe.newplayer.ui.theme.VideoPlayerTheme
+import net.newpipe.newplayer.ui.theme.VideoPlayerDarkTheme
 import net.newpipe.newplayer.ui.common.getEmbeddedUiConfig
 
 private const val TAG = "EmbeddedGestureUI"
@@ -171,7 +171,7 @@ internal fun EmbeddedGestureUI(
 @Preview(device = "spec:width=600px,height=400px,dpi=440,orientation=landscape")
 @Composable
 private fun EmbeddedGestureUIPreview() {
-    VideoPlayerTheme {
+    VideoPlayerDarkTheme {
         Surface(modifier = Modifier.wrapContentSize(), color = Color.DarkGray) {
             EmbeddedGestureUI(
                 modifier = Modifier,

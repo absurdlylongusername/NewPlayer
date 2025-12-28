@@ -30,8 +30,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import net.newpipe.newplayer.R
 import net.newpipe.newplayer.uiModel.InternalNewPlayerViewModel
 import net.newpipe.newplayer.uiModel.NewPlayerViewModel
-import net.newpipe.newplayer.ui.theme.VideoPlayerTheme
+import net.newpipe.newplayer.ui.theme.VideoPlayerDarkTheme
 import net.newpipe.newplayer.data.NewPlayerException
+import net.newpipe.newplayer.ui.theme.VideoPlayerLightTheme
 
 
 /**
@@ -49,7 +50,7 @@ class NewPlayerView : FrameLayout {
             applyViewModel()
         }
 
-    private val composeView:ComposeView
+    private val composeView: ComposeView
 
     @JvmOverloads
     constructor(
@@ -67,9 +68,7 @@ class NewPlayerView : FrameLayout {
         composeView.apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
-                VideoPlayerTheme {
-                    NewPlayerUI(viewModel = viewModel as InternalNewPlayerViewModel?)
-                }
+                NewPlayerUI(viewModel = viewModel as InternalNewPlayerViewModel?)
             }
         }
     }
