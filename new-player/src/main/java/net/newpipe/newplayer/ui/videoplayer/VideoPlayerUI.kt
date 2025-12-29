@@ -23,7 +23,11 @@ package net.newpipe.newplayer.ui.videoplayer
 import android.os.Build
 import androidx.annotation.OptIn
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.clickable
+import androidx.compose.animation.core.snap
+import androidx.compose.animation.expandIn
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -44,14 +48,14 @@ import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.core.graphics.toRect
 import androidx.media3.common.util.UnstableApi
-import net.newpipe.newplayer.uiModel.NewPlayerUIState
-import net.newpipe.newplayer.uiModel.InternalNewPlayerViewModel
-import net.newpipe.newplayer.ui.selection_ui.StreamSelectUI
 import net.newpipe.newplayer.data.NewPlayerException
 import net.newpipe.newplayer.ui.common.activity
 import net.newpipe.newplayer.ui.selection_ui.ChapterSelectUI
+import net.newpipe.newplayer.ui.selection_ui.StreamSelectUI
 import net.newpipe.newplayer.ui.videoplayer.pip.getPipParams
 import net.newpipe.newplayer.ui.videoplayer.pip.supportsPip
+import net.newpipe.newplayer.uiModel.InternalNewPlayerViewModel
+import net.newpipe.newplayer.uiModel.NewPlayerUIState
 import net.newpipe.newplayer.uiModel.UIModeState
 
 @OptIn(UnstableApi::class)
@@ -93,7 +97,7 @@ internal fun VideoPlayerUi(viewModel: InternalNewPlayerViewModel, uiState: NewPl
             && supportsPip(activity)
         ) {
             val pipParams = getPipParams(uiState.contentRatio, videoViewBounds)
-            if(pipParams != null)
+            if (pipParams != null)
                 activity.setPictureInPictureParams(pipParams)
         }
     }
@@ -131,7 +135,11 @@ internal fun VideoPlayerUi(viewModel: InternalNewPlayerViewModel, uiState: NewPl
             viewModel, uiState = uiState
         )
 
-        AnimatedVisibility(visible = uiState.uiMode.isStreamSelect) {
+        AnimatedVisibility(
+            visible = uiState.uiMode.isStreamSelect,
+            enter = fadeIn() + expandIn(),
+            exit = fadeOut(animationSpec = snap(0))
+        ) {
             Surface(
                 modifier = Modifier.fillMaxSize(),
                 color = STREAMSELECT_UI_BACKGROUND_COLOR
@@ -144,7 +152,11 @@ internal fun VideoPlayerUi(viewModel: InternalNewPlayerViewModel, uiState: NewPl
             }
         }
 
-        AnimatedVisibility(visible = uiState.uiMode.isChapterSelect) {
+        AnimatedVisibility(
+            visible = uiState.uiMode.isChapterSelect,
+            enter = fadeIn() + expandIn(),
+            exit = fadeOut(animationSpec = snap(0))
+        ) {
             Surface(
                 modifier = Modifier.fillMaxSize(),
                 color = STREAMSELECT_UI_BACKGROUND_COLOR
