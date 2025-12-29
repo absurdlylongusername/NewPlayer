@@ -121,8 +121,9 @@ internal fun ReorderableStreamItemsList(
                 StreamItem(
                     playlistItem = playlistItem,
                     onClicked = {
-                        if (!uiState.uiMode.isStreamSelect) {
+                        if (!uiState.uiMode.isVideoStreamSelect && !uiState.uiMode.inAudioMode) {
                             // We don't select the stream when we are not in stream select mode
+                            // We do this to prevent handling touch events during fade out animation.
                             return@StreamItem
                         }
                         viewModel.streamSelected(index)

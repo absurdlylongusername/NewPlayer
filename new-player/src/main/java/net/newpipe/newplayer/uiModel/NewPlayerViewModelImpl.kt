@@ -339,7 +339,7 @@ class NewPlayerViewModelImpl @Inject constructor(
     }
 
     private fun requiresPlaylistProgressUpdate(uiModeState: UIModeState) =
-        uiModeState.isStreamSelect
+        uiModeState.isVideoStreamSelect
                 || (uiModeState.inAudioMode && uiState.value.showPlaylistInAudioPlayer)
 
     override fun changeUiMode(newUiModeState: UIModeState, embeddedUiConfig: EmbeddedUiConfig?) {

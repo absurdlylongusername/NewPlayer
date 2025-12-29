@@ -27,7 +27,6 @@ import androidx.compose.animation.core.snap
 import androidx.compose.animation.expandIn
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -136,7 +135,7 @@ internal fun VideoPlayerUi(viewModel: InternalNewPlayerViewModel, uiState: NewPl
         )
 
         AnimatedVisibility(
-            visible = uiState.uiMode.isStreamSelect,
+            visible = uiState.uiMode.isVideoStreamSelect,
             enter = fadeIn() + expandIn(),
             exit = fadeOut(animationSpec = snap(0))
         ) {

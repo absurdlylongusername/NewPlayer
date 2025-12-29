@@ -95,7 +95,7 @@ enum class UIModeState {
                 else -> false
             }
 
-    val isStreamSelect: Boolean
+    val isVideoStreamSelect: Boolean
         get() =
             when (this) {
                 EMBEDDED_VIDEO_STREAM_SELECT -> true
