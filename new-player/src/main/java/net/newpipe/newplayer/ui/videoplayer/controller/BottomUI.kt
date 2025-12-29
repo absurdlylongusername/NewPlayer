@@ -50,14 +50,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.media3.common.util.UnstableApi
 import net.newpipe.newplayer.R
-import net.newpipe.newplayer.uiModel.EmbeddedUiConfig
 import net.newpipe.newplayer.uiModel.UIModeState
 import net.newpipe.newplayer.uiModel.NewPlayerUIState
 import net.newpipe.newplayer.uiModel.InternalNewPlayerViewModel
 import net.newpipe.newplayer.uiModel.NewPlayerViewModelDummy
 import net.newpipe.newplayer.ui.common.NewPlayerSeeker
 import net.newpipe.newplayer.ui.common.thumb_preview.ThumbPreview
-import net.newpipe.newplayer.ui.theme.VideoPlayerTheme
+import net.newpipe.newplayer.ui.theme.VideoPlayerDarkTheme
 import net.newpipe.newplayer.ui.common.getEmbeddedUiConfig
 import net.newpipe.newplayer.ui.common.getLocale
 import net.newpipe.newplayer.ui.common.getTimeStringFromMs
@@ -106,7 +105,7 @@ internal fun BottomUI(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            val locale = getLocale()!!
+            val locale = getLocale()
             Text(text =
             getTimeStringFromMs(uiState.playbackPositionInMs, getLocale() ?: locale),
                 modifier = Modifier.onGloballyPositioned {
@@ -164,7 +163,7 @@ internal fun BottomUI(
 private fun VideoPlayerControllerBottomUIPreview() {
     var sliderPosition by remember { mutableFloatStateOf(0f) }
 
-    VideoPlayerTheme {
+    VideoPlayerDarkTheme {
         Surface(color = Color.Black) {
             BottomUI(
                 modifier = Modifier,

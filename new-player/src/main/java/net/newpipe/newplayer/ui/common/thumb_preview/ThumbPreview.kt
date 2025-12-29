@@ -66,8 +66,9 @@ import androidx.media3.common.util.UnstableApi
 import net.newpipe.newplayer.R
 import net.newpipe.newplayer.data.Chapter
 import net.newpipe.newplayer.ui.seeker.SeekerDefaults
-import net.newpipe.newplayer.ui.theme.VideoPlayerTheme
+import net.newpipe.newplayer.ui.theme.VideoPlayerDarkTheme
 import net.newpipe.newplayer.uiModel.NewPlayerUIState
+
 
 /** @hide */
 internal const val PREVIEW_BOX_PADDING = 4
@@ -233,7 +234,7 @@ private fun ThumbPreviewPreview() {
         BitmapFactory.decodeResource(LocalContext.current.resources, R.mipmap.thumbnail_preview)
 
 
-    VideoPlayerTheme {
+    VideoPlayerDarkTheme {
         Column(
             modifier = Modifier
                 .fillMaxSize()

@@ -62,7 +62,7 @@ import net.newpipe.newplayer.uiModel.NewPlayerUIState
 import net.newpipe.newplayer.uiModel.InternalNewPlayerViewModel
 import net.newpipe.newplayer.uiModel.NewPlayerViewModelDummy
 import net.newpipe.newplayer.uiModel.UIModeState
-import net.newpipe.newplayer.ui.theme.VideoPlayerTheme
+import net.newpipe.newplayer.ui.theme.VideoPlayerDarkTheme
 import net.newpipe.newplayer.ui.videoplayer.pip.supportsPip
 import net.newpipe.newplayer.ui.common.getEmbeddedUiConfig
 import net.newpipe.newplayer.ui.common.showNotYetImplementedToast
@@ -203,7 +203,7 @@ private fun CustomMenuItem(icon: ImageVector, text: Int, onClick: () -> Unit) {
 @Preview(device = "spec:width=1080px,height=1080px,dpi=440,orientation=landscape")
 @Composable
 private fun VideoPlayerControllerDropDownPreview() {
-    VideoPlayerTheme {
+    VideoPlayerDarkTheme {
         Box(Modifier.fillMaxSize()) {
             VideoPlayerMenu(
                 viewModel = NewPlayerViewModelDummy(),

@@ -39,7 +39,7 @@ import androidx.media3.common.util.UnstableApi
 import net.newpipe.newplayer.uiModel.NewPlayerUIState
 import net.newpipe.newplayer.uiModel.InternalNewPlayerViewModel
 import net.newpipe.newplayer.uiModel.NewPlayerViewModelDummy
-import net.newpipe.newplayer.ui.theme.VideoPlayerTheme
+import net.newpipe.newplayer.ui.theme.VideoPlayerDarkTheme
 import net.newpipe.newplayer.ui.common.getEmbeddedUiConfig
 import net.newpipe.newplayer.ui.common.getInsets
 
@@ -114,7 +114,7 @@ internal fun ChapterSelectUI(
 @Preview(device = "id:pixel_5")
 @Composable
 private fun VideoPlayerChannelSelectUIPreview() {
-    VideoPlayerTheme {
+    VideoPlayerDarkTheme {
         Surface(modifier = Modifier.fillMaxSize(), color = Color.DarkGray) {
             ChapterSelectUI(
                 viewModel = NewPlayerViewModelDummy(),

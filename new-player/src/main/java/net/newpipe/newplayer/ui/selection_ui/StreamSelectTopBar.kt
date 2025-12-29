@@ -45,7 +45,7 @@ import net.newpipe.newplayer.uiModel.InternalNewPlayerViewModel
 import net.newpipe.newplayer.uiModel.NewPlayerViewModelDummy
 import net.newpipe.newplayer.ui.common.RepeatModeButton
 import net.newpipe.newplayer.ui.common.ShuffleModeButton
-import net.newpipe.newplayer.ui.theme.VideoPlayerTheme
+import net.newpipe.newplayer.ui.theme.VideoPlayerDarkTheme
 import net.newpipe.newplayer.ui.common.getEmbeddedUiConfig
 import net.newpipe.newplayer.ui.common.getLocale
 import net.newpipe.newplayer.ui.common.getPlaylistDurationInMS
@@ -68,7 +68,7 @@ internal fun StreamSelectTopBar(
     TopAppBar(modifier = modifier,
         colors = topAppBarColors(containerColor = Color.Transparent),
         title = {
-            val locale = getLocale()!!
+            val locale = getLocale()
             val duration = getPlaylistDurationInMS(uiState.playList)
             val durationString = getTimeStringFromMs(timeSpanInMs = duration, locale)
             val playbackPositionString = getTimeStringFromMs(
@@ -121,7 +121,7 @@ internal fun StreamSelectTopBar(
 @Preview(device = "spec:width=1080px,height=150px,dpi=440,orientation=landscape")
 @Composable
 private fun StreamSelectTopBarPreview() {
-    VideoPlayerTheme {
+    VideoPlayerDarkTheme {
         Surface(modifier = Modifier.fillMaxSize(), color = Color.DarkGray) {
             StreamSelectTopBar(
                 modifier = Modifier.fillMaxSize(),

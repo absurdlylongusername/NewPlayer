@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.media3.common.util.UnstableApi
 import net.newpipe.newplayer.ui.selection_ui.ReorderableStreamItemsList
 import net.newpipe.newplayer.ui.selection_ui.StreamSelectTopBar
-import net.newpipe.newplayer.ui.theme.VideoPlayerTheme
+import net.newpipe.newplayer.ui.theme.VideoPlayerDarkTheme
 import net.newpipe.newplayer.uiModel.InternalNewPlayerViewModel
 import net.newpipe.newplayer.uiModel.NewPlayerUIState
 import net.newpipe.newplayer.uiModel.NewPlayerViewModelDummy
@@ -113,7 +113,7 @@ private fun LandscapeCoverArtOrPlaylistUI(
 @Preview(device = "spec:parent=pixel_6,orientation=landscape")
 @Composable
 private fun AudioPlayerUILandscapePreview() {
-    VideoPlayerTheme {
+    VideoPlayerDarkTheme {
         Box(
             modifier = Modifier
                 .wrapContentSize()
@@ -132,7 +132,7 @@ private fun AudioPlayerUILandscapePreview() {
 @Preview(device = "spec:parent=pixel_6,orientation=landscape")
 @Composable
 private fun AudioPlayerUILandscapePreviewWithPlaylist() {
-    VideoPlayerTheme {
+    VideoPlayerDarkTheme {
         Box(
             modifier = Modifier
                 .wrapContentSize()

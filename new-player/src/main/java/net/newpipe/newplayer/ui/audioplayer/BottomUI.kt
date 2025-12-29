@@ -58,7 +58,7 @@ import net.newpipe.newplayer.uiModel.NewPlayerUIState
 import net.newpipe.newplayer.uiModel.InternalNewPlayerViewModel
 import net.newpipe.newplayer.uiModel.NewPlayerViewModelDummy
 import net.newpipe.newplayer.uiModel.UIModeState
-import net.newpipe.newplayer.ui.theme.VideoPlayerTheme
+import net.newpipe.newplayer.ui.theme.VideoPlayerDarkTheme
 import net.newpipe.newplayer.ui.videoplayer.pip.supportsPip
 import net.newpipe.newplayer.ui.common.getEmbeddedUiConfig
 import net.newpipe.newplayer.ui.common.showNotYetImplementedToast
@@ -225,7 +225,7 @@ private fun Menu(viewModel: InternalNewPlayerViewModel, uiState: NewPlayerUIStat
 @Preview(device = "id:pixel_6")
 @Composable
 private fun AudioBottomUIPreview() {
-    VideoPlayerTheme {
+    VideoPlayerDarkTheme {
         Box(modifier = Modifier.fillMaxWidth()) {
             AudioBottomUI(
                 viewModel = NewPlayerViewModelDummy(),

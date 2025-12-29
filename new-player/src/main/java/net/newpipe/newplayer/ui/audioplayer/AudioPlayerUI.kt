@@ -26,54 +26,24 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
-import androidx.compose.foundation.basicMarquee
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.media3.common.util.UnstableApi
-import net.newpipe.newplayer.R
-import net.newpipe.newplayer.ui.common.NewPlayerSeeker
-import net.newpipe.newplayer.ui.common.thumb_preview.ThumbPreview
-import net.newpipe.newplayer.ui.common.Thumbnail
-import net.newpipe.newplayer.ui.common.getInsets
-import net.newpipe.newplayer.ui.common.getLocale
-import net.newpipe.newplayer.ui.common.getTimeStringFromMs
-import net.newpipe.newplayer.ui.seeker.SeekerDefaults
 import net.newpipe.newplayer.ui.selection_ui.ChapterSelectUI
-import net.newpipe.newplayer.ui.selection_ui.ReorderableStreamItemsList
-import net.newpipe.newplayer.ui.selection_ui.StreamSelectTopBar
 import net.newpipe.newplayer.ui.selection_ui.StreamSelectUI
-import net.newpipe.newplayer.ui.theme.VideoPlayerTheme
+import net.newpipe.newplayer.ui.theme.VideoPlayerDarkTheme
+import net.newpipe.newplayer.ui.common.getInsets
 import net.newpipe.newplayer.uiModel.InternalNewPlayerViewModel
 import net.newpipe.newplayer.uiModel.NewPlayerUIState
 import net.newpipe.newplayer.uiModel.NewPlayerViewModelDummy
@@ -174,7 +144,7 @@ internal fun AudioPlayerUI(
 @Preview(device = "id:pixel_6", showSystemUi = true)
 @Composable
 private fun AudioPlayerUIPortraitPreview() {
-    VideoPlayerTheme {
+    VideoPlayerDarkTheme {
         AudioPlayerUI(
             viewModel = NewPlayerViewModelDummy(),
             uiState = NewPlayerUIState.DUMMY.copy(
@@ -189,7 +159,7 @@ private fun AudioPlayerUIPortraitPreview() {
 @Preview(device = "id:pixel_6", showSystemUi = true)
 @Composable
 private fun AudioPlayerUIPortraitPreviewWithPlaylist() {
-    VideoPlayerTheme {
+    VideoPlayerDarkTheme {
         AudioPlayerUI(
             viewModel = NewPlayerViewModelDummy(),
             uiState = NewPlayerUIState.DUMMY.copy(
@@ -205,7 +175,7 @@ private fun AudioPlayerUIPortraitPreviewWithPlaylist() {
 @Preview(device = "spec:parent=pixel_6,orientation=landscape", showSystemUi = true)
 @Composable
 private fun AudioPlayerUILandscapePreview() {
-    VideoPlayerTheme {
+    VideoPlayerDarkTheme {
         AudioPlayerUI(
             viewModel = NewPlayerViewModelDummy(),
             uiState = NewPlayerUIState.DUMMY.copy(uiMode = UIModeState.FULLSCREEN_AUDIO),
@@ -218,7 +188,7 @@ private fun AudioPlayerUILandscapePreview() {
 @Preview(device = "spec:parent=pixel_6,orientation=landscape", showSystemUi = true)
 @Composable
 private fun AudioPlayerUILandscapePreviewWithPlaylist() {
-    VideoPlayerTheme {
+    VideoPlayerDarkTheme {
         AudioPlayerUI(
             viewModel = NewPlayerViewModelDummy(),
             uiState = NewPlayerUIState.DUMMY.copy(
@@ -234,7 +204,7 @@ private fun AudioPlayerUILandscapePreviewWithPlaylist() {
 @Preview(device = "spec:parent=pixel_6,orientation=portrait", showSystemUi = true)
 @Composable
 private fun AudioPlayerUIEmbeddedPreview() {
-    VideoPlayerTheme {
+    VideoPlayerDarkTheme {
         AudioPlayerUI(
             viewModel = NewPlayerViewModelDummy(),
             uiState = NewPlayerUIState.DUMMY.copy(uiMode = UIModeState.EMBEDDED_AUDIO),

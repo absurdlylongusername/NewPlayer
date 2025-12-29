@@ -127,9 +127,9 @@ internal fun setScreenBrightness(value: Float, activity: Activity) {
 /** @hide */
 @Composable
 @ReadOnlyComposable
-internal fun getLocale(): Locale? {
+internal fun getLocale(): Locale {
     val configuration = LocalConfiguration.current
-    return ConfigurationCompat.getLocales(configuration).get(0)
+    return ConfigurationCompat.getLocales(configuration).get(0) ?: Locale.getDefault()
 }
 
 @Composable

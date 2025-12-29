@@ -54,7 +54,7 @@ import net.newpipe.newplayer.uiModel.NewPlayerUIState
 import net.newpipe.newplayer.uiModel.InternalNewPlayerViewModel
 import net.newpipe.newplayer.uiModel.NewPlayerViewModelDummy
 import net.newpipe.newplayer.uiModel.UIModeState
-import net.newpipe.newplayer.ui.theme.VideoPlayerTheme
+import net.newpipe.newplayer.ui.theme.VideoPlayerDarkTheme
 import net.newpipe.newplayer.ui.videoplayer.controller.BottomUI
 import net.newpipe.newplayer.ui.videoplayer.controller.CenterUI
 import net.newpipe.newplayer.ui.videoplayer.controller.TopUI
@@ -182,7 +182,7 @@ internal fun PreviewBackgroundSurface(
 @Preview(device = "spec:width=1080px,height=600px,dpi=440,orientation=landscape")
 @Composable
 private fun VideoPlayerControllerUIPreviewEmbedded() {
-    VideoPlayerTheme {
+    VideoPlayerDarkTheme {
         PreviewBackgroundSurface {
             VideoPlayerControllerUI(
                 NewPlayerViewModelDummy(), NewPlayerUIState.DUMMY.copy(
@@ -197,7 +197,7 @@ private fun VideoPlayerControllerUIPreviewEmbedded() {
 @Preview(device = "spec:width=2340px,height=1080px,dpi=440,orientation=landscape")
 @Composable
 private fun VideoPlayerControllerUIPreviewLandscape() {
-    VideoPlayerTheme {
+    VideoPlayerDarkTheme {
         PreviewBackgroundSurface {
             VideoPlayerControllerUI(
                 NewPlayerViewModelDummy(), NewPlayerUIState.DUMMY.copy(
@@ -212,7 +212,7 @@ private fun VideoPlayerControllerUIPreviewLandscape() {
 @Preview(device = "spec:width=2340px,height=1080px,dpi=440,orientation=portrait")
 @Composable
 private fun VideoPlayerControllerUIPreviewPortrait() {
-    VideoPlayerTheme {
+    VideoPlayerDarkTheme {
         PreviewBackgroundSurface {
             VideoPlayerControllerUI(
                 NewPlayerViewModelDummy(), NewPlayerUIState.DUMMY.copy(

@@ -64,7 +64,7 @@ import androidx.media3.common.util.UnstableApi
 import net.newpipe.newplayer.R
 import net.newpipe.newplayer.uiModel.NewPlayerUIState
 import net.newpipe.newplayer.ui.videoplayer.CONTROLLER_UI_BACKGROUND_COLOR
-import net.newpipe.newplayer.ui.theme.VideoPlayerTheme
+import net.newpipe.newplayer.ui.theme.VideoPlayerDarkTheme
 import net.newpipe.newplayer.ui.common.ReorderHapticFeedback
 import net.newpipe.newplayer.ui.common.ReorderHapticFeedbackType
 import net.newpipe.newplayer.ui.common.Thumbnail
@@ -88,7 +88,7 @@ internal fun StreamItem(
     isDragging: Boolean,
     isCurrentlyPlaying: Boolean
 ) {
-    val locale = getLocale()!!
+    val locale = getLocale()
 
     val interactionSource = remember { MutableInteractionSource() }
 
@@ -140,7 +140,7 @@ internal fun StreamItem(
             ) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = Color.White.copy(alpha = 0.2f),
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
                 ) {}
             }
 
@@ -178,8 +178,9 @@ internal fun StreamItem(
                             text = getTimeStringFromMs(
                                 playlistItem.mediaMetadata.durationMs ?: 0L,
                                 locale,
-                                leadingZerosForMinutes = false
+                                leadingZerosForMinutes = false,
                             ),
+                            color = MaterialTheme.colorScheme.onPrimary,
                             fontSize = 14.sp,
                         )
                     }
@@ -246,7 +247,7 @@ internal fun StreamItem(
 @Preview(device = "spec:width=1080px,height=400px,dpi=440,orientation=landscape")
 @Composable
 private fun StreamItemPreview() {
-    VideoPlayerTheme {
+    VideoPlayerDarkTheme {
         Surface(modifier = Modifier.fillMaxSize(), color = Color.DarkGray) {
             Box(modifier = Modifier.fillMaxSize()) {
                 StreamItem(

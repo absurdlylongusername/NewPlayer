@@ -20,7 +20,7 @@ import net.newpipe.newplayer.ui.common.thumb_preview.ThumbPreview
 import net.newpipe.newplayer.ui.common.getLocale
 import net.newpipe.newplayer.ui.common.getTimeStringFromMs
 import net.newpipe.newplayer.ui.seeker.SeekerDefaults
-import net.newpipe.newplayer.ui.theme.VideoPlayerTheme
+import net.newpipe.newplayer.ui.theme.VideoPlayerDarkTheme
 import net.newpipe.newplayer.uiModel.InternalNewPlayerViewModel
 import net.newpipe.newplayer.uiModel.NewPlayerUIState
 import net.newpipe.newplayer.uiModel.NewPlayerViewModelDummy
@@ -33,7 +33,7 @@ internal fun ProgressUI(
     viewModel: InternalNewPlayerViewModel,
     uiState: NewPlayerUIState
 ) {
-    val locale = getLocale()!!
+    val locale = getLocale()
 
     Column(modifier = modifier) {
         Box(
@@ -77,7 +77,7 @@ internal fun ProgressUI(
 @Preview(device = "id:pixel_6")
 @Composable
 private fun AudioPlayerProgressUIPreview() {
-    VideoPlayerTheme {
+    VideoPlayerDarkTheme {
         ProgressUI(
             viewModel = NewPlayerViewModelDummy(),
             uiState = NewPlayerUIState.DUMMY.copy(playList = emptyList(), isLoading = false)

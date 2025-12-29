@@ -34,6 +34,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -50,10 +51,11 @@ import androidx.compose.ui.unit.sp
 import net.newpipe.newplayer.data.Chapter
 import net.newpipe.newplayer.data.NewPlayerException
 import net.newpipe.newplayer.R
-import net.newpipe.newplayer.ui.theme.VideoPlayerTheme
+import net.newpipe.newplayer.ui.theme.VideoPlayerDarkTheme
 import net.newpipe.newplayer.ui.common.Thumbnail
 import net.newpipe.newplayer.ui.common.getLocale
 import net.newpipe.newplayer.ui.common.getTimeStringFromMs
+import net.newpipe.newplayer.ui.theme.VideoPlayerLightTheme
 
 
 /** @hide */
@@ -80,7 +82,7 @@ internal fun ChapterItem(
     onClicked: (Int) -> Unit,
     isCurrentChapter: Boolean
 ) {
-    val locale = getLocale()!!
+    val locale = getLocale()
     Box(
         modifier = modifier
             .height(80.dp)
@@ -94,7 +96,7 @@ internal fun ChapterItem(
         ) {
             Surface(
                 modifier = Modifier.fillMaxSize(),
-                color = Color.White.copy(alpha = 0.2f),
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
             ) {}
         }
 
@@ -136,7 +138,7 @@ internal fun ChapterItem(
 @Preview(device = "spec:width=1080px,height=300px,dpi=440,orientation=landscape")
 @Composable
 private fun ChapterItemPreview() {
-    VideoPlayerTheme {
+    VideoPlayerDarkTheme {
         Surface(modifier = Modifier.fillMaxSize(), color = Color.DarkGray) {
             ChapterItem(
                 id = 0,

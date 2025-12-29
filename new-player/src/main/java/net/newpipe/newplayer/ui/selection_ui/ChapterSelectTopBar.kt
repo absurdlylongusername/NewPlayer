@@ -38,7 +38,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import net.newpipe.newplayer.R
-import net.newpipe.newplayer.ui.theme.VideoPlayerTheme
+import net.newpipe.newplayer.ui.theme.VideoPlayerDarkTheme
 
 /** @hide */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -63,7 +63,7 @@ internal fun ChapterSelectTopBar(modifier: Modifier = Modifier, onClose: () -> U
 @Preview(device = "spec:width=1080px,height=150px,dpi=440,orientation=landscape")
 @Composable
 private fun ChapterTopBarPreview() {
-    VideoPlayerTheme {
+    VideoPlayerDarkTheme {
         Surface(modifier = Modifier.fillMaxSize(), color = Color.DarkGray) {
             ChapterSelectTopBar(modifier = Modifier.fillMaxSize()) {}
         }
