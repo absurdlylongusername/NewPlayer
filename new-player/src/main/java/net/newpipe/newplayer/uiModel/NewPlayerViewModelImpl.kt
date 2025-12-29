@@ -225,6 +225,7 @@ class NewPlayerViewModelImpl @Inject constructor(
                     mutableUiState.update {
                         it.copy(
                             playList = playlist,
+                            currentPlaylistItemIndex = newPlayer.currentlyPlayingPlaylistItem
                         )
                     }
                 }
