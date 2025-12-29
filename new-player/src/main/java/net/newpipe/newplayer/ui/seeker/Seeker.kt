@@ -45,7 +45,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.progressSemantics
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -331,6 +331,8 @@ private fun ChapterDots(
     val thumbRadius by dimensions.thumbRadius()
     val trackHeight by dimensions.trackHeight()
 
+    val defaultColor = MaterialTheme.colorScheme.onSurface
+
     Canvas(
         modifier = modifier.graphicsLayer {
             alpha = 1.0f
@@ -346,7 +348,8 @@ private fun ChapterDots(
                 drawDot(
                     x = rtlAware(segment.startPx, widthPx, isRtl),
                     trackHeight = trackHeight.toPx(),
-                    color = Color.White.copy(alpha = 0.9f)
+                    color = if (segment.color == Color.Unspecified)
+                        defaultColor else segment.color
                 )
             }
         }
