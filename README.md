@@ -1,3 +1,17 @@
+> [!CAUTION]
+> # :rotating_light: THIS REPOSITORY HAS MOVED :rotating_light:
+>
+> ## [NewPlayer is now on Codeberg](https://codeberg.org/TeamNewPipe/NewPlayer)
+>
+> ### https://codeberg.org/TeamNewPipe/NewPlayer
+>
+> **This GitHub repository is archived and will no longer receive updates, bug fixes, or new features.**
+>
+> **All issues, pull requests, and contributions should go to the Codeberg repository.**
+>
+> **Please update your bookmarks and remotes.**
+
+---
 
 <p align="center">
 <img src="misc/logo_shadow.png">
